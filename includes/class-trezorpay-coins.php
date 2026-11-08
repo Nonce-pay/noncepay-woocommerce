@@ -42,11 +42,12 @@ final class TrezorPay_Coins {
 	 */
 	public static function all() {
 		$coins = get_transient( self::TRANSIENT );
-		if ( ! is_array( $coins ) || ! $coins ) {
+		if ( false === $coins ) {
 			$coins = self::fetch();
 		}
-		if ( ! $coins ) {
-			$coins = self::defaults();
+		if ( ! is_array( $coins ) || ! $coins ) {
+			$fallback = get_option( self::FALLBACK_OPTION );
+			$coins    = is_array( $fallback ) && $fallback ? $fallback : self::defaults();
 		}
 
 		foreach ( $coins as $ticker => $coin ) {
@@ -143,8 +144,7 @@ final class TrezorPay_Coins {
 		$info = TrezorPay_API::info();
 		if ( is_wp_error( $info ) ) {
 			set_transient( self::TRANSIENT, array(), 5 * MINUTE_IN_SECONDS );
-			$fallback = get_option( self::FALLBACK_OPTION );
-			return is_array( $fallback ) ? $fallback : array();
+			return array();
 		}
 
 		$coins = array();

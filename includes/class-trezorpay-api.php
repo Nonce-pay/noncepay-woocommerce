@@ -16,6 +16,8 @@ final class TrezorPay_API {
 
 	const PUBKEY_OPTION = 'trezorpay_pubkey';
 
+	const PUBKEY_RETRY = 'trezorpay_pubkey_retry';
+
 	/**
 	 * Creates (or returns the existing) payment address for a callback URL.
 	 *
@@ -98,10 +100,15 @@ final class TrezorPay_API {
 		if ( is_array( $cached ) && ! empty( $cached['pem'] ) && ( ! $refresh || time() - (int) $cached['fetched_at'] < HOUR_IN_SECONDS ) ) {
 			return (string) $cached['pem'];
 		}
+		$fallback = is_array( $cached ) && ! empty( $cached['pem'] ) ? (string) $cached['pem'] : '';
+		if ( get_transient( self::PUBKEY_RETRY ) ) {
+			return $fallback;
+		}
 		$response = self::get( '/pubkey/' );
 		if ( is_wp_error( $response ) || empty( $response['pubkey'] ) || ! is_string( $response['pubkey'] ) ) {
 			TrezorPay_Logger::error( 'Could not fetch the TrezorPay public key.' );
-			return is_array( $cached ) && ! empty( $cached['pem'] ) ? (string) $cached['pem'] : '';
+			set_transient( self::PUBKEY_RETRY, 1, 15 * MINUTE_IN_SECONDS );
+			return $fallback;
 		}
 		update_option(
 			self::PUBKEY_OPTION,

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-08T14:49:04+00:00\n"
+"POT-Creation-Date: 2026-11-08T15:12:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: trezorpay-for-woocommerce\n"
@@ -32,20 +32,20 @@ msgstr ""
 
 #. Author of the plugin
 #: trezorpay-for-woocommerce.php
-#: includes/class-trezorpay-payment-page.php:138
+#: includes/class-trezorpay-payment-page.php:141
 msgid "TrezorPay"
 msgstr ""
 
-#: includes/class-trezorpay-api.php:151
+#: includes/class-trezorpay-api.php:158
 msgid "The crypto payment service is unreachable. Please try again in a moment."
 msgstr ""
 
-#: includes/class-trezorpay-api.php:159
+#: includes/class-trezorpay-api.php:166
 msgid "The crypto payment service returned an unexpected response. Please try again in a moment."
 msgstr ""
 
 #. translators: 1: coin symbol, 2: network name
-#: includes/class-trezorpay-coins.php:94
+#: includes/class-trezorpay-coins.php:95
 #, php-format
 msgid "%1$s (%2$s)"
 msgstr ""
@@ -217,7 +217,7 @@ msgid "Add at least one wallet below: the gateway is hidden at checkout until a 
 msgstr ""
 
 #: includes/class-trezorpay-gateway.php:155
-#: includes/class-trezorpay-payment-page.php:132
+#: includes/class-trezorpay-payment-page.php:135
 msgid "Coin"
 msgstr ""
 
@@ -270,195 +270,223 @@ msgstr ""
 msgid "Please choose a cryptocurrency to pay with."
 msgstr ""
 
-#: includes/class-trezorpay-gateway.php:337
+#: includes/class-trezorpay-gateway.php:331
+#: includes/class-trezorpay-rest.php:131
+msgid "Please try again in a moment."
+msgstr ""
+
+#: includes/class-trezorpay-gateway.php:343
 msgid "A payment was already detected for this order in another cryptocurrency. Please complete it with the same coin."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:61
+#: includes/class-trezorpay-order.php:81
 msgid "Please choose a supported cryptocurrency."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:78
-msgid "This cryptocurrency is temporarily unavailable. Please choose another one."
-msgstr ""
-
 #. translators: 1: amount, 2: coin label, 3: payment address
-#: includes/class-trezorpay-order.php:118
+#: includes/class-trezorpay-order.php:143
 #, php-format
 msgid "TrezorPay: awaiting %1$s %2$s on %3$s."
 msgstr ""
 
 #. translators: 1: amount, 2: coin label
-#: includes/class-trezorpay-order.php:145
+#: includes/class-trezorpay-order.php:170
 #, php-format
 msgid "TrezorPay: quote refreshed to %1$s %2$s."
 msgstr ""
 
 #. translators: 1: amount, 2: coin label, 3: transaction id
-#: includes/class-trezorpay-order.php:207
+#: includes/class-trezorpay-order.php:237
 #, php-format
 msgid "TrezorPay: payment of %1$s %2$s seen on chain (txid_in %3$s), waiting for confirmations."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:227
+#: includes/class-trezorpay-order.php:257
 msgid "TrezorPay: a confirmed payment arrived with an unreadable amount and was not credited. Check your wallet and review the order manually."
 msgstr ""
 
+#. translators: 1: amount, 2: coin label, 3: transaction id
+#: includes/class-trezorpay-order.php:267
+#, php-format
+msgid "TrezorPay: a confirmed payment of %1$s %2$s (txid_in %3$s) arrived without a forwarding transaction and was not credited. Check your wallet and review the order manually."
+msgstr ""
+
 #. translators: 1: amount, 2: coin label, 3: txid_in, 4: amount forwarded, 5: txid_out, 6: total received, 7: total expected
-#: includes/class-trezorpay-order.php:248
+#: includes/class-trezorpay-order.php:285
 #, php-format
 msgid "TrezorPay: payment of %1$s %2$s confirmed (txid_in %3$s). %4$s forwarded to your wallet (txid_out %5$s). Received so far: %6$s of %7$s."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:275
+#: includes/class-trezorpay-order.php:314
 msgid "TrezorPay: an extra payment arrived on an order that is already paid. Refund the customer from your wallet if needed."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:280
+#: includes/class-trezorpay-order.php:319
 msgid "TrezorPay: the quoted amount is missing, review the order manually."
 msgstr ""
 
 #. translators: 1: amount over, 2: coin label
-#: includes/class-trezorpay-order.php:294
+#: includes/class-trezorpay-order.php:339
 #, php-format
 msgid "TrezorPay: overpaid by %1$s %2$s."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:297
-msgid "TrezorPay: the payment was sent after the quote expired. The quoted amount was received, so the order is marked paid."
+#: includes/class-trezorpay-order.php:342
+msgid "TrezorPay: the quoted amount was received, but the order had been cancelled before the payment arrived. Review it manually: restore the order or refund the customer from your wallet."
+msgstr ""
+
+#: includes/class-trezorpay-order.php:354
+msgid "TrezorPay: part of the payment was sent after the quote expired and the current rate could not be checked. Review it manually."
+msgstr ""
+
+#. translators: 1: amount received, 2: coin label, 3: amount the order total is worth now
+#: includes/class-trezorpay-order.php:359
+#, php-format
+msgid "TrezorPay: part of the payment was sent after the quote expired and is now worth less than the order total (%1$s %2$s received, %3$s needed at the current rate). Review it manually."
+msgstr ""
+
+#: includes/class-trezorpay-order.php:362
+msgid "TrezorPay: part of the payment was sent after the quote expired. It still covers the order total at the current rate, so the order is marked paid."
 msgstr ""
 
 #. translators: 1: amount received, 2: amount expected, 3: coin label, 4: amount missing
-#: includes/class-trezorpay-order.php:306
+#: includes/class-trezorpay-order.php:371
 #, php-format
 msgid "TrezorPay: payment received after the quote expired and below the quoted amount (%1$s of %2$s %3$s, %4$s missing). Review it manually."
 msgstr ""
 
 #. translators: 1: amount received, 2: amount expected, 3: coin label, 4: amount missing
-#: includes/class-trezorpay-order.php:309
+#: includes/class-trezorpay-order.php:374
 #, php-format
 msgid "TrezorPay: underpaid, %1$s of %2$s %3$s received (%4$s missing). The order stays on hold until the rest arrives."
 msgstr ""
 
 #. translators: 1: amount, 2: coin label, 3: address
-#: includes/class-trezorpay-order.php:341
+#: includes/class-trezorpay-order.php:416
 #, php-format
 msgid "TrezorPay: a payment of %1$s %2$s arrived on %3$s, an address quoted earlier for this order. It is not credited automatically: review it manually."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:439
+#: includes/class-trezorpay-order.php:546
+msgid "This cryptocurrency is temporarily unavailable. Please choose another one."
+msgstr ""
+
+#: includes/class-trezorpay-order.php:595
 msgid "This order has nothing to pay."
 msgstr ""
 
 #. translators: %s: currency code
-#: includes/class-trezorpay-order.php:448
+#: includes/class-trezorpay-order.php:604
 #, php-format
 msgid "Crypto payments are not available for prices in %s. Please choose another payment method."
 msgstr ""
 
 #. translators: 1: coin label, 2: minimum amount, 3: coin symbol
-#: includes/class-trezorpay-order.php:507
+#: includes/class-trezorpay-order.php:663
 #, php-format
 msgid "The order total is below the minimum payment for %1$s (%2$s %3$s). Please choose another cryptocurrency."
 msgstr ""
 
-#: includes/class-trezorpay-order.php:521
+#: includes/class-trezorpay-order.php:677
 msgid "The crypto payment could not be prepared. Please try again or choose another payment method."
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:76
+#: includes/class-trezorpay-payment-page.php:73
 msgid "Complete your crypto payment"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:86
+#: includes/class-trezorpay-payment-page.php:83
 msgid "Payment QR code"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:91
-#: assets/js/payment.js:38
+#: includes/class-trezorpay-payment-page.php:88
+#: assets/js/payment.js:39
 msgid "Amount still to send"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:91
-#: assets/js/payment.js:39
+#: includes/class-trezorpay-payment-page.php:88
+#: assets/js/payment.js:40
 msgid "Amount to send"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:95
-#: includes/class-trezorpay-payment-page.php:102
+#: includes/class-trezorpay-payment-page.php:92
+#: includes/class-trezorpay-payment-page.php:99
 msgid "Copy"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:99
-#: includes/class-trezorpay-payment-page.php:133
+#: includes/class-trezorpay-payment-page.php:96
+#: includes/class-trezorpay-payment-page.php:136
 msgid "Payment address"
 msgstr ""
 
+#. translators: 1: amount still missing, 2: minimum payment, 3: coin symbol
+#: includes/class-trezorpay-payment-page.php:105
+#: assets/js/payment.js:47
+#, php-format,js-format
+msgid "Only %1$s %3$s is missing, but payments below %2$s %3$s cannot be processed. Send at least %2$s %3$s: the extra is noted on your order."
+msgstr ""
+
 #. translators: 1: coin symbol, 2: network name
-#: includes/class-trezorpay-payment-page.php:108
+#: includes/class-trezorpay-payment-page.php:111
 #, php-format
 msgid "Send only %1$s on the %2$s network to this address. Any other coin or network will be lost."
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:112
+#: includes/class-trezorpay-payment-page.php:115
 msgid "Get a new quote"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:116
+#: includes/class-trezorpay-payment-page.php:119
 msgid "Send the exact amount, network fees on top. This page updates by itself once the payment is seen on the blockchain."
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:134
+#: includes/class-trezorpay-payment-page.php:137
 msgid "Quoted amount"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:135
+#: includes/class-trezorpay-payment-page.php:138
 msgid "Received"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:136
+#: includes/class-trezorpay-payment-page.php:139
 msgid "Quote valid until"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:167
-#: assets/js/payment.js:21
+#: includes/class-trezorpay-payment-page.php:170
+#: assets/js/payment.js:22
 msgid "Waiting for your payment"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:168
-#: assets/js/payment.js:22
+#: includes/class-trezorpay-payment-page.php:171
+#: assets/js/payment.js:23
 msgid "Payment seen, waiting for confirmations"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:169
-#: assets/js/payment.js:23
+#: includes/class-trezorpay-payment-page.php:172
+#: assets/js/payment.js:24
 msgid "Partial payment received"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:170
-#: assets/js/payment.js:24
+#: includes/class-trezorpay-payment-page.php:173
+#: assets/js/payment.js:25
 msgid "Payment confirmed. Thank you!"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:171
-#: assets/js/payment.js:25
+#: includes/class-trezorpay-payment-page.php:174
+#: assets/js/payment.js:26
 msgid "This quote has expired"
 msgstr ""
 
-#: includes/class-trezorpay-payment-page.php:172
-#: assets/js/payment.js:26
+#: includes/class-trezorpay-payment-page.php:175
+#: assets/js/payment.js:27
 msgid "This order is cancelled"
 msgstr ""
 
-#: includes/class-trezorpay-rest.php:129
-msgid "Please try again in a moment."
-msgstr ""
-
-#: includes/class-trezorpay-rest.php:135
+#: includes/class-trezorpay-rest.php:137
 msgid "This quote cannot be refreshed."
 msgstr ""
 
-#: includes/class-trezorpay-rest.php:216
+#: includes/class-trezorpay-rest.php:222
 msgid "Order not found."
 msgstr ""
 
@@ -474,16 +502,16 @@ msgstr ""
 msgid "Crypto"
 msgstr ""
 
-#: assets/js/payment.js:55
+#: assets/js/payment.js:70
 msgid "The exchange rate is no longer guaranteed. Get a new quote before paying."
 msgstr ""
 
 #. translators: %s: remaining time as mm:ss
-#: assets/js/payment.js:71
+#: assets/js/payment.js:86
 #, js-format
 msgid "Rate guaranteed for %s"
 msgstr ""
 
-#: assets/js/payment.js:113
+#: assets/js/payment.js:128
 msgid "Copied"
 msgstr ""

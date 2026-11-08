@@ -11,3 +11,4 @@ delete_option( 'woocommerce_trezorpay_settings' );
 delete_option( 'trezorpay_pubkey' );
 delete_option( 'trezorpay_info_cache' );
 delete_transient( 'trezorpay_info' );
+delete_transient( 'trezorpay_pubkey_retry' );

@@ -13,6 +13,7 @@
       : function (text) {
           return text
         }
+  var sprintf = window.wp && window.wp.i18n ? window.wp.i18n.sprintf : null
   var config = JSON.parse(root.getAttribute('data-config') || '{}')
   var data = config.data || {}
   var clockOffset = Date.now() / 1000 - (config.now || Date.now() / 1000)
@@ -37,7 +38,21 @@
     el('amount-label').textContent = partial
       ? __('Amount still to send', 'trezorpay-for-woocommerce')
       : __('Amount to send', 'trezorpay-for-woocommerce')
-    el('amount').textContent = partial ? data.remaining : data.amount
+    el('amount').textContent = data.to_send || (partial ? data.remaining : data.amount)
+    var note = el('minimum-note')
+    note.hidden = !data.below_minimum
+    if (data.below_minimum && sprintf) {
+      note.textContent = sprintf(
+        /* translators: 1: amount still missing, 2: minimum payment, 3: coin symbol */
+        __(
+          'Only %1$s %3$s is missing, but payments below %2$s %3$s cannot be processed. Send at least %2$s %3$s: the extra is noted on your order.',
+          'trezorpay-for-woocommerce'
+        ),
+        data.remaining,
+        data.minimum,
+        data.symbol
+      )
+    }
     el('address').textContent = data.address
     var qr = el('qr')
     if (qr && data.qr) {

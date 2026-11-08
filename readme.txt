@@ -41,7 +41,8 @@ What is sent, and when:
 * When a customer places an order with this payment method: the order total and your store currency (to convert the price into the chosen coin), your receiving wallet address for that coin, and a callback URL on your site that contains the order number and a random per-order secret. TrezorPay uses the callback URL to notify your store of payments. The payment address and amount are then sent back to draw the QR code.
 * When the payment page refreshes an expired quote: the order total and store currency again.
 * When the settings page or checkout is loaded and the coin list is not cached (at most once an hour): a request for the list of supported coins. No store or customer data is sent.
-* When the first payment notification arrives (and at most once an hour if a signature does not match): a request for TrezorPay's public key, to verify notifications. No data is sent.
+* When the first payment notification arrives, and again when a signature does not match (at most once an hour, and at most once every 15 minutes after a failed attempt): a request for TrezorPay's public key, to verify notifications. No data is sent.
+* When a payment is confirmed after its quote expired: the order total and store currency, to check the payment still covers the order at the current rate.
 
 No customer name, email, postal address or IP address is sent to TrezorPay by this plugin. TrezorPay sees the requests of your web server, not of your customers' browsers.
 
@@ -70,7 +71,11 @@ When the confirmed payments add up to at least the quoted amount minus the under
 
 = What happens if the customer pays too little, too much or too late? =
 
-Too little: the order stays on hold with a note giving the missing amount; the customer can send the rest to the same address. Too much: the order is paid and the excess is noted on the order. Too late: payment addresses never expire, so a late payment is still credited. If it covers the quoted amount the order is paid, otherwise it is held for your review. Customers can also refresh an expired quote from the payment page before paying.
+Too little: the order stays on hold with a note giving the missing amount; the customer can send the rest to the same address. When the rest is below the coin's minimum payment, the payment page asks for the minimum instead, because smaller payments are not processed. Too much: the order is paid and the excess is noted on the order. Too late: payment addresses never expire, so a late payment is still credited, but the order is marked paid only if the coins received still cover the order total at the rate of the moment; otherwise it is held for your review. A payment arriving on an order that was already cancelled always puts it on hold for review. Customers can also refresh an expired quote from the payment page before paying.
+
+= I changed a wallet: where do pending orders pay? =
+
+Orders created before the change keep their payment address, which forwards to the old wallet. When a customer pays such an order again, a new address forwarding to the new wallet is created, and payments still arriving on the old address are noted on the order for review.
 
 = Can a customer pay in several transactions? =
 
@@ -78,11 +83,15 @@ Yes. Each transaction is credited once, and the amounts add up.
 
 = My site is behind a reverse proxy or CDN and callbacks are rejected =
 
-Callbacks are signed over the exact URL TrezorPay called. The plugin rebuilds it from your Site Address (scheme, host and port) and the request path. If your proxy changes the host, the scheme or the path, set the public base URL with a filter:
+Callbacks are signed over the exact URL TrezorPay called. The plugin rebuilds it from the scheme, host and port of the callback URL saved on the order and the request path received. If your proxy changes the path, or you need another base, set it with a filter:
 
 `add_filter( 'trezorpay_callback_base_url', function () { return 'https://shop.example.com'; } );`
 
 Callbacks are delivered to `/wp-json/trezorpay/v1/callback`. Make sure security plugins or firewalls do not block that REST route for anonymous requests.
+
+= Which databases are supported? =
+
+Concurrent payment notifications for the same order are serialized with a MySQL/MariaDB named lock (`GET_LOCK`). It works on a single primary database server, which is what almost every WordPress host uses. Setups that send queries to several servers (read/write splitting across replicas, Galera multi-primary clusters, Vitess or PlanetScale) do not share named locks between servers; on those, make sure WordPress writes and these locks go to a single primary.
 
 = Can I pin TrezorPay's public key? =
 

@@ -29,14 +29,13 @@ final class TrezorPay_Payment_Page {
 	 * @return array
 	 */
 	public static function view_data( $order ) {
-		$ticker = (string) $order->get_meta( TrezorPay_Order::TICKER );
-		$coin   = TrezorPay_Coins::get( $ticker );
+		$symbol = (string) $order->get_meta( TrezorPay_Order::SYMBOL );
 		$qr     = (string) $order->get_meta( TrezorPay_Order::QR );
 		return array_merge(
 			TrezorPay_Order::state( $order ),
 			array(
 				'address' => (string) $order->get_meta( TrezorPay_Order::ADDRESS ),
-				'symbol'  => $coin ? $coin['symbol'] : strtoupper( $ticker ),
+				'symbol'  => '' !== $symbol ? $symbol : strtoupper( (string) $order->get_meta( TrezorPay_Order::TICKER ) ),
 				'qr'      => '' === $qr ? '' : 'data:image/png;base64,' . $qr,
 			)
 		);
@@ -54,10 +53,8 @@ final class TrezorPay_Payment_Page {
 		}
 
 		$data   = self::view_data( $order );
-		$ticker = (string) $order->get_meta( TrezorPay_Order::TICKER );
-		$coin   = TrezorPay_Coins::get( $ticker );
 		$symbol = $data['symbol'];
-		$net    = $coin ? $coin['network_label'] : strtoupper( $ticker );
+		$net    = (string) $order->get_meta( TrezorPay_Order::NETWORK );
 
 		wp_enqueue_style( 'trezorpay-payment', TREZORPAY_URL . 'assets/css/payment.css', array(), TREZORPAY_VERSION );
 		wp_enqueue_script( 'trezorpay-payment', TREZORPAY_URL . 'assets/js/payment.js', array( 'wp-i18n' ), TREZORPAY_VERSION, true );
@@ -90,7 +87,7 @@ final class TrezorPay_Payment_Page {
 					<div class="trezorpay__field">
 						<span class="trezorpay__label" data-trezorpay="amount-label"><?php echo esc_html( 'partial' === $data['state'] ? __( 'Amount still to send', 'trezorpay-for-woocommerce' ) : __( 'Amount to send', 'trezorpay-for-woocommerce' ) ); ?></span>
 						<div class="trezorpay__copy">
-							<code data-trezorpay="amount"><?php echo esc_html( 'partial' === $data['state'] ? $data['remaining'] : $data['amount'] ); ?></code>
+							<code data-trezorpay="amount"><?php echo esc_html( $data['to_send'] ); ?></code>
 							<span class="trezorpay__symbol"><?php echo esc_html( $symbol ); ?></span>
 							<button type="button" class="trezorpay__button" data-copy="amount"><?php esc_html_e( 'Copy', 'trezorpay-for-woocommerce' ); ?></button>
 						</div>
@@ -102,6 +99,12 @@ final class TrezorPay_Payment_Page {
 							<button type="button" class="trezorpay__button" data-copy="address"><?php esc_html_e( 'Copy', 'trezorpay-for-woocommerce' ); ?></button>
 						</div>
 					</div>
+					<p class="trezorpay__minimum" data-trezorpay="minimum-note" <?php echo $data['below_minimum'] ? '' : 'hidden'; ?>>
+						<?php
+						/* translators: 1: amount still missing, 2: minimum payment, 3: coin symbol */
+						echo esc_html( sprintf( __( 'Only %1$s %3$s is missing, but payments below %2$s %3$s cannot be processed. Send at least %2$s %3$s: the extra is noted on your order.', 'trezorpay-for-woocommerce' ), $data['remaining'], $data['minimum'], $symbol ) );
+						?>
+					</p>
 					<p class="trezorpay__warning">
 						<?php
 						/* translators: 1: coin symbol, 2: network name */
@@ -129,7 +132,7 @@ final class TrezorPay_Payment_Page {
 		}
 		$state = TrezorPay_Order::state( $order );
 		$rows  = array(
-			__( 'Coin', 'trezorpay-for-woocommerce' )            => TrezorPay_Order::coin_label( (string) $order->get_meta( TrezorPay_Order::TICKER ) ),
+			__( 'Coin', 'trezorpay-for-woocommerce' )            => TrezorPay_Order::label( $order ),
 			__( 'Payment address', 'trezorpay-for-woocommerce' ) => (string) $order->get_meta( TrezorPay_Order::ADDRESS ),
 			__( 'Quoted amount', 'trezorpay-for-woocommerce' )   => $state['amount'],
 			__( 'Received', 'trezorpay-for-woocommerce' )        => $state['received'],

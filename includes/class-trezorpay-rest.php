@@ -64,14 +64,16 @@ final class TrezorPay_REST {
 	 * @return WP_REST_Response
 	 */
 	public static function callback( WP_REST_Request $request ) {
-		if ( ! self::signature_is_valid( (string) $request->get_header( 'x-ca-signature' ) ) ) {
+		$params   = $request->get_query_params();
+		$order_id = isset( $params['order'] ) ? absint( $params['order'] ) : 0;
+		$token    = isset( $params['token'] ) && is_string( $params['token'] ) ? $params['token'] : '';
+		$order    = $order_id ? wc_get_order( $order_id ) : false;
+
+		if ( ! self::signature_is_valid( (string) $request->get_header( 'x-ca-signature' ), TrezorPay_Order::is_ours( $order ) ? $order : null ) ) {
 			TrezorPay_Logger::error( 'Callback rejected: invalid signature. If your site is behind a proxy, see the FAQ about trezorpay_callback_base_url.' );
 			return self::text( 'Bad signature', 401 );
 		}
 
-		$params   = $request->get_query_params();
-		$order_id = isset( $params['order'] ) ? absint( $params['order'] ) : 0;
-		$token    = isset( $params['token'] ) && is_string( $params['token'] ) ? $params['token'] : '';
 		TrezorPay_Logger::debug( sprintf( 'Signed callback for order %d (pending=%s).', $order_id, isset( $params['pending'] ) ? sanitize_text_field( (string) $params['pending'] ) : '?' ) );
 
 		if ( ! $order_id || '' === $token ) {
@@ -83,8 +85,8 @@ final class TrezorPay_REST {
 		}
 
 		try {
-			$order = wc_get_order( $order_id );
-			if ( ! TrezorPay_Order::is_ours( $order ) || ! hash_equals( (string) $order->get_meta( TrezorPay_Order::TOKEN ), $token ) ) {
+			$order = TrezorPay_Order::reload( $order_id );
+			if ( ! TrezorPay_Order::is_ours( $order ) || ! TrezorPay_Order::token_matches( $order, $token ) ) {
 				TrezorPay_Logger::debug( sprintf( 'Callback for order %d ignored: unknown order or token mismatch.', $order_id ) );
 				return self::text( '*ok*' );
 			}
@@ -129,7 +131,7 @@ final class TrezorPay_REST {
 			return new WP_Error( 'trezorpay_busy', __( 'Please try again in a moment.', 'trezorpay-for-woocommerce' ), array( 'status' => 503 ) );
 		}
 		try {
-			$order = wc_get_order( $order->get_id() );
+			$order = TrezorPay_Order::reload( $order->get_id() );
 			$state = TrezorPay_Order::state( $order );
 			if ( 'expired' !== $state['state'] || ! $order->has_status( 'pending' ) ) {
 				return new WP_Error( 'trezorpay_not_expired', __( 'This quote cannot be refreshed.', 'trezorpay-for-woocommerce' ), array( 'status' => 409 ) );
@@ -166,15 +168,16 @@ final class TrezorPay_REST {
 	/**
 	 * Verifies x-ca-signature over the URL exactly as TrezorPay called it.
 	 *
-	 * @param string $signature Base64 signature.
+	 * @param string        $signature Base64 signature.
+	 * @param WC_Order|null $order     Order named by the callback, whose stored base URL is used.
 	 * @return bool
 	 */
-	private static function signature_is_valid( $signature ) {
+	private static function signature_is_valid( $signature, $order ) {
 		$raw = base64_decode( $signature, true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- the signature header is base64.
 		if ( '' === $signature || false === $raw || ! function_exists( 'openssl_verify' ) ) {
 			return false;
 		}
-		$url = self::requested_url();
+		$url = self::requested_url( $order );
 		$key = TrezorPay_API::public_key();
 		if ( '' !== $key && 1 === openssl_verify( $url, $raw, $key, OPENSSL_ALGO_SHA256 ) ) {
 			return true;
@@ -187,17 +190,20 @@ final class TrezorPay_REST {
 	}
 
 	/**
-	 * The full URL of the current request: site scheme and host plus the raw request URI.
+	 * The full URL TrezorPay called: the scheme, host and port of the callback URL stored on the
+	 * order (the site URL when there is none) plus the raw request URI.
 	 *
-	 * Behind a proxy that rewrites the host or path, set the public base with the
-	 * trezorpay_callback_base_url filter.
+	 * Behind a proxy that rewrites the path, set the public base with the trezorpay_callback_base_url filter.
 	 *
+	 * @param WC_Order|null $order Order named by the callback.
 	 * @return string
 	 */
-	private static function requested_url() {
-		$home = wp_parse_url( home_url() );
-		$base = ( isset( $home['scheme'] ) ? $home['scheme'] : 'https' ) . '://' . ( isset( $home['host'] ) ? $home['host'] : '' ) . ( isset( $home['port'] ) ? ':' . $home['port'] : '' );
-		$base = untrailingslashit( (string) apply_filters( 'trezorpay_callback_base_url', $base ) );
+	private static function requested_url( $order ) {
+		$base = $order ? (string) $order->get_meta( TrezorPay_Order::BASE_URL ) : '';
+		if ( '' === $base ) {
+			$base = TrezorPay_Order::url_base( home_url() );
+		}
+		$base = untrailingslashit( (string) apply_filters( 'trezorpay_callback_base_url', $base, $order ) );
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- signed bytes must stay exactly as received; only compared, never output.
 		$uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
 		return $base . $uri;
@@ -237,12 +243,12 @@ final class TrezorPay_REST {
 	}
 
 	/**
-	 * Takes the per-order lock that serializes concurrent callbacks.
+	 * Takes the per-order lock that serializes callbacks and payment changes.
 	 *
 	 * @param int $order_id Order id.
 	 * @return bool
 	 */
-	private static function lock( $order_id ) {
+	public static function lock( $order_id ) {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- a MySQL named lock cannot be cached or done through the WP API.
 		return '1' === (string) $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK(%s, %d)', self::lock_name( $order_id ), 15 ) );
@@ -253,7 +259,7 @@ final class TrezorPay_REST {
 	 *
 	 * @param int $order_id Order id.
 	 */
-	private static function unlock( $order_id ) {
+	public static function unlock( $order_id ) {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- a MySQL named lock cannot be cached or done through the WP API.
 		$wpdb->get_var( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', self::lock_name( $order_id ) ) );

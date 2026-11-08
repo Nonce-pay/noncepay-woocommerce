@@ -327,18 +327,26 @@ class TrezorPay_Gateway extends WC_Payment_Gateway {
 			return array( 'result' => 'failure' );
 		}
 
-		if ( TrezorPay_Order::has_payments( $order ) ) {
-			if ( (string) $order->get_meta( TrezorPay_Order::TICKER ) === $ticker ) {
-				return array(
-					'result'   => 'success',
-					'redirect' => $this->get_return_url( $order ),
-				);
-			}
-			wc_add_notice( __( 'A payment was already detected for this order in another cryptocurrency. Please complete it with the same coin.', 'trezorpay-for-woocommerce' ), 'error' );
+		if ( ! TrezorPay_REST::lock( $order_id ) ) {
+			wc_add_notice( __( 'Please try again in a moment.', 'trezorpay-for-woocommerce' ), 'error' );
 			return array( 'result' => 'failure' );
 		}
-
-		$started = TrezorPay_Order::start( $order, $ticker, $this->wallets()[ $ticker ], $this->quote_minutes() );
+		try {
+			$order = TrezorPay_Order::reload( $order_id );
+			if ( TrezorPay_Order::has_payments( $order ) ) {
+				if ( (string) $order->get_meta( TrezorPay_Order::TICKER ) === $ticker ) {
+					return array(
+						'result'   => 'success',
+						'redirect' => $this->get_return_url( $order ),
+					);
+				}
+				wc_add_notice( __( 'A payment was already detected for this order in another cryptocurrency. Please complete it with the same coin.', 'trezorpay-for-woocommerce' ), 'error' );
+				return array( 'result' => 'failure' );
+			}
+			$started = TrezorPay_Order::start( $order, $ticker, $this->wallets()[ $ticker ], $this->quote_minutes() );
+		} finally {
+			TrezorPay_REST::unlock( $order_id );
+		}
 		if ( is_wp_error( $started ) ) {
 			wc_add_notice( $started->get_error_message(), 'error' );
 			return array( 'result' => 'failure' );
