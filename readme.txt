@@ -1,0 +1,114 @@
+=== TrezorPay for WooCommerce ===
+Contributors: trezorpay
+Tags: crypto, bitcoin, usdt, woocommerce, payment gateway
+Requires at least: 6.4
+Tested up to: 7.1
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Accept USDT, USDC, Bitcoin, Ethereum, Solana and more in WooCommerce. Payments go straight to your own wallets: no account, no API key.
+
+== Description ==
+
+TrezorPay for WooCommerce adds a crypto payment method to your store. Customers pick a coin at checkout, see the exact amount, a QR code and a unique payment address, and the order updates by itself once the payment is confirmed on the blockchain.
+
+TrezorPay is non-custodial: every payment is forwarded automatically to the wallet you entered in the settings. There is no sign-up, no API key, no monthly fee and no withdrawal step.
+
+= Features =
+
+* Stablecoins and major coins: USDT (Tron, BNB Smart Chain, Ethereum), USDC (Base, Polygon, Arbitrum, Solana), BTC, ETH, LTC, TRX, SOL, BNB, DOGE, and every other coin TrezorPay supports.
+* One wallet per coin, entered in the gateway settings. Only coins with a wallet are offered.
+* Works with the classic checkout and the Cart and Checkout blocks.
+* Compatible with High-Performance Order Storage (HPOS).
+* Payment page with amount and address copy buttons, QR code, network warning, quote countdown and a live status (waiting, payment seen, confirmed).
+* Partial payments add up: a customer may pay in several transactions. Underpayments put the order on hold, overpayments are noted on the order.
+* Configurable underpayment tolerance, quote validity and paid status (processing or completed).
+* Every callback is verified with TrezorPay's RSA signature and processed once, even when callbacks arrive at the same time.
+* Exact decimal math for crypto amounts, never floating point.
+
+= Fees =
+
+TrezorPay deducts a 1.25% service fee (lower with volume) and the network cost from each payment before forwarding it to your wallet. The customer pays the quoted amount; you receive that amount minus the fee. See https://trezorpay.com/docs/fees/.
+
+== External services ==
+
+This plugin relies on the TrezorPay API (https://api.trezorpay.com), operated by TrezorPay, to create payment addresses, convert prices, draw QR codes and notify your store of payments. Without it the payment method cannot work.
+
+What is sent, and when:
+
+* When a customer places an order with this payment method: the order total and your store currency (to convert the price into the chosen coin), your receiving wallet address for that coin, and a callback URL on your site that contains the order number and a random per-order secret. TrezorPay uses the callback URL to notify your store of payments. The payment address and amount are then sent back to draw the QR code.
+* When the payment page refreshes an expired quote: the order total and store currency again.
+* When the settings page or checkout is loaded and the coin list is not cached (at most once an hour): a request for the list of supported coins. No store or customer data is sent.
+* When the first payment notification arrives (and at most once an hour if a signature does not match): a request for TrezorPay's public key, to verify notifications. No data is sent.
+
+No customer name, email, postal address or IP address is sent to TrezorPay by this plugin. TrezorPay sees the requests of your web server, not of your customers' browsers.
+
+TrezorPay terms of service: https://trezorpay.com/terms/
+TrezorPay privacy policy: https://trezorpay.com/privacy/
+
+== Installation ==
+
+1. Install and activate WooCommerce 8.0 or later.
+2. Install this plugin from Plugins > Add New, or upload the `trezorpay-for-woocommerce` folder to `/wp-content/plugins/`, then activate it.
+3. Go to WooCommerce > Settings > Payments > TrezorPay.
+4. Enable the gateway and enter your receiving wallet address for each coin you want to accept. Use an address you control on that exact network.
+5. Save. The coins with a wallet are now offered at checkout.
+
+Your store currency must be one TrezorPay converts (USD, EUR, GBP, CAD, JPY, CHF, AUD and about thirty others). The settings page warns you when it is not.
+
+== Frequently Asked Questions ==
+
+= Do I need an account or an API key? =
+
+No. The callback URL created for each order identifies the payment, and funds go to the wallets you configure.
+
+= When is an order marked as paid? =
+
+When the confirmed payments add up to at least the quoted amount minus the underpayment tolerance (0.5% by default). The order goes on hold as soon as a payment is seen on the blockchain, and to processing (or completed, if you choose) once enough is confirmed and forwarded to your wallet.
+
+= What happens if the customer pays too little, too much or too late? =
+
+Too little: the order stays on hold with a note giving the missing amount; the customer can send the rest to the same address. Too much: the order is paid and the excess is noted on the order. Too late: payment addresses never expire, so a late payment is still credited. If it covers the quoted amount the order is paid, otherwise it is held for your review. Customers can also refresh an expired quote from the payment page before paying.
+
+= Can a customer pay in several transactions? =
+
+Yes. Each transaction is credited once, and the amounts add up.
+
+= My site is behind a reverse proxy or CDN and callbacks are rejected =
+
+Callbacks are signed over the exact URL TrezorPay called. The plugin rebuilds it from your Site Address (scheme, host and port) and the request path. If your proxy changes the host, the scheme or the path, set the public base URL with a filter:
+
+`add_filter( 'trezorpay_callback_base_url', function () { return 'https://shop.example.com'; } );`
+
+Callbacks are delivered to `/wp-json/trezorpay/v1/callback`. Make sure security plugins or firewalls do not block that REST route for anonymous requests.
+
+= Can I pin TrezorPay's public key? =
+
+Yes. Define `TREZORPAY_PUBLIC_KEY_PEM` in `wp-config.php` with the PEM key from https://api.trezorpay.com/pubkey/. By default the key is fetched from that URL and cached.
+
+= Where are the logs? =
+
+WooCommerce > Status > Logs, source `trezorpay-for-woocommerce`. Errors are always logged; enable "Debug log" in the settings for API calls and callbacks. Per-order secrets are never logged.
+
+= Can I refund from WooCommerce? =
+
+No. Payments are already in your wallet: refund the customer from your wallet, then mark the order refunded.
+
+== Screenshots ==
+
+1. Gateway settings: one receiving wallet per coin.
+2. Coin choice in the Checkout block.
+3. Payment page with QR code, amount, address and live status.
+4. Order notes after a confirmed payment.
+
+== Changelog ==
+
+= 1.0.0 =
+* First release.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+First release.

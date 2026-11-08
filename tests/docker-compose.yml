@@ -1,0 +1,61 @@
+# PLUGIN_DIR=../dist/trezorpay-for-woocommerce mounts the built plugin instead of the repo (for Plugin Check).
+# Throwaway WordPress + WooCommerce for manual and scripted tests. Nothing is persisted:
+# run `docker compose -f tests/docker-compose.yml down -v` when done. Create the throwaway callback key first:
+# openssl genrsa -out tests/keys/private.pem 2048 && openssl rsa -in tests/keys/private.pem -pubout -out tests/keys/public.pem
+name: trezorpay-wc-test
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 3s
+      retries: 30
+
+  wordpress:
+    image: wordpress:php8.2-apache
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8088:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      # Test-only: pins the callback public key to the throwaway key in ./keys when it exists.
+      WORDPRESS_CONFIG_EXTRA: |
+        if ( is_readable( '/test-keys/public.pem' ) ) { define( 'TREZORPAY_PUBLIC_KEY_PEM', file_get_contents( '/test-keys/public.pem' ) ); }
+    volumes:
+      - wp:/var/www/html
+      - ${PLUGIN_DIR:-..}:/var/www/html/wp-content/plugins/trezorpay-for-woocommerce:ro
+      - ./keys:/test-keys:ro
+
+  cli:
+    image: wordpress:cli
+    user: "33:33"
+    depends_on:
+      - wordpress
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      HOME: /tmp
+    volumes:
+      - wp:/var/www/html
+      - ${PLUGIN_DIR:-..}:/var/www/html/wp-content/plugins/trezorpay-for-woocommerce:ro
+      - ./keys:/test-keys:ro
+    entrypoint: ["wp"]
+    command: ["--info"]
+
+volumes:
+  wp:
