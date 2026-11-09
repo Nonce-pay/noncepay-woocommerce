@@ -1,0 +1,52 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "NoncePay – Crypto Payment Gateway for WooCommerce",
+    "description": "WooCommerce with NoncePay installed, opened on the payment method settings.",
+    "author": "swartz13",
+    "categories": ["WooCommerce", "Payments"]
+  },
+  "landingPage": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=noncepay",
+  "preferredVersions": {
+    "php": "8.2",
+    "wp": "latest"
+  },
+  "features": {
+    "networking": true
+  },
+  "login": true,
+  "steps": [
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "wordpress.org/plugins",
+        "slug": "woocommerce"
+      },
+      "options": {
+        "activate": true
+      }
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "wordpress.org/plugins",
+        "slug": "noncepay-for-woocommerce"
+      },
+      "options": {
+        "activate": true
+      }
+    },
+    {
+      "step": "setSiteOptions",
+      "options": {
+        "blogname": "NoncePay demo store",
+        "woocommerce_currency": "USD",
+        "woocommerce_coming_soon": "no",
+        "woocommerce_task_list_hidden": "yes",
+        "woocommerce_onboarding_profile": {
+          "skipped": true
+        }
+      }
+    }
+  ]
+}

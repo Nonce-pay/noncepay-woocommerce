@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       NoncePay for WooCommerce
+ * Plugin Name:       NoncePay – Crypto Payment Gateway for WooCommerce
  * Plugin URI:        https://github.com/Nonce-pay/noncepay-woocommerce
  * Description:       Accept crypto payments (USDT, USDC, BTC, ETH, SOL and more) sent straight to your own wallets. Non-custodial, no account, no API key.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -21,7 +21,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NONCEPAY_VERSION', '1.1.0' );
+define( 'NONCEPAY_VERSION', '1.2.0' );
 define( 'NONCEPAY_FILE', __FILE__ );
 define( 'NONCEPAY_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NONCEPAY_URL', plugin_dir_url( __FILE__ ) );
@@ -41,6 +41,14 @@ add_action(
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', NONCEPAY_FILE, true );
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', NONCEPAY_FILE, true );
 		}
+	}
+);
+
+add_action(
+	'init',
+	static function () {
+		// Bundled translations work before translate.wordpress.org language packs are approved; packs still take precedence.
+		load_plugin_textdomain( 'noncepay-for-woocommerce', false, dirname( plugin_basename( NONCEPAY_FILE ) ) . '/languages' ); // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
 	}
 );
 

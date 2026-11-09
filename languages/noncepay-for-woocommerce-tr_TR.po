@@ -1,0 +1,651 @@
+# Copyright (C) 2026 NoncePay
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: NoncePay – Crypto Payment Gateway for WooCommerce 1.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/noncepay-for-woocommerce\n"
+"POT-Creation-Date: 2026-11-08T15:12:56+00:00\n"
+"PO-Revision-Date: 2026-11-09 16:43+0000\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Domain: noncepay-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: noncepay-for-woocommerce.php
+msgid "NoncePay – Crypto Payment Gateway for WooCommerce"
+msgstr "NoncePay – WooCommerce için Kripto Ödeme Geçidi"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: noncepay-for-woocommerce.php
+msgid "https://noncepay.app/"
+msgstr "https://noncepay.app/"
+
+#. Description of the plugin
+#: noncepay-for-woocommerce.php
+msgid ""
+"Accept crypto payments (USDT, USDC, BTC, ETH, SOL and more) sent straight to "
+"your own wallets. Non-custodial, no account, no API key."
+msgstr ""
+"Kripto ödemelerini (USDT, USDC, BTC, ETH, SOL ve daha fazlası) doğrudan kendi"
+" cüzdanlarınıza alın. Gözetimsiz: hesap yok, API anahtarı yok."
+
+#. Author of the plugin
+#: noncepay-for-woocommerce.php includes/class-noncepay-payment-page.php:141
+msgid "NoncePay"
+msgstr "NoncePay"
+
+#: includes/class-noncepay-api.php:158
+msgid ""
+"The crypto payment service is unreachable. Please try again in a moment."
+msgstr "Kripto ödeme hizmetine ulaşılamıyor. Lütfen birazdan tekrar deneyin."
+
+#: includes/class-noncepay-api.php:166
+msgid ""
+"The crypto payment service returned an unexpected response. Please try again "
+"in a moment."
+msgstr ""
+"Kripto ödeme hizmeti beklenmeyen bir yanıt döndürdü. Lütfen birazdan tekrar "
+"deneyin."
+
+#. translators: 1: coin symbol, 2: network name
+#: includes/class-noncepay-coins.php:95
+#, php-format
+msgid "%1$s (%2$s)"
+msgstr "%1$s (%2$s)"
+
+#: includes/class-noncepay-coins.php:235
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+#: includes/class-noncepay-coins.php:236
+msgid "Ethereum"
+msgstr "Ethereum"
+
+#: includes/class-noncepay-coins.php:237
+msgid "Ethereum ERC-20"
+msgstr "Ethereum ERC-20"
+
+#: includes/class-noncepay-coins.php:238
+msgid "BNB Smart Chain BEP-20"
+msgstr "BNB Smart Chain BEP-20"
+
+#: includes/class-noncepay-coins.php:239
+msgid "Tron"
+msgstr "Tron"
+
+#: includes/class-noncepay-coins.php:240
+msgid "Tron TRC-20"
+msgstr "Tron TRC-20"
+
+#: includes/class-noncepay-coins.php:241
+msgid "Polygon"
+msgstr "Polygon"
+
+#: includes/class-noncepay-coins.php:242
+msgid "Base"
+msgstr "Base"
+
+#: includes/class-noncepay-coins.php:243
+msgid "Arbitrum One"
+msgstr "Arbitrum One"
+
+#: includes/class-noncepay-coins.php:244
+msgid "Optimism"
+msgstr "Optimism"
+
+#: includes/class-noncepay-coins.php:245
+msgid "Avalanche C-Chain"
+msgstr "Avalanche C-Chain"
+
+#: includes/class-noncepay-coins.php:246
+msgid "Solana"
+msgstr "Solana"
+
+#: includes/class-noncepay-coins.php:247
+msgid "Litecoin"
+msgstr "Litecoin"
+
+#: includes/class-noncepay-coins.php:248
+msgid "Bitcoin Cash"
+msgstr "Bitcoin Cash"
+
+#: includes/class-noncepay-coins.php:249
+msgid "Dogecoin"
+msgstr "Dogecoin"
+
+#: includes/class-noncepay-gateway.php:23
+msgid "NoncePay (crypto)"
+msgstr "NoncePay (kripto)"
+
+#: includes/class-noncepay-gateway.php:24
+msgid ""
+"Accept USDT, USDC, BTC, ETH, SOL and more. Each payment is forwarded straight"
+" to your own wallet: no account, no API key, no custody. NoncePay deducts its"
+" 1.25% fee from what reaches your wallet."
+msgstr ""
+"USDT, USDC, BTC, ETH, SOL ve daha fazlasını kabul edin. Her ödeme doğrudan "
+"kendi cüzdanınıza aktarılır: hesap yok, API anahtarı yok, emanet yok. "
+"NoncePay, cüzdanınıza ulaşan tutardan %1,25 komisyonunu düşer."
+
+#: includes/class-noncepay-gateway.php:43
+msgid "Enable/Disable"
+msgstr "Etkinleştir/Devre dışı bırak"
+
+#: includes/class-noncepay-gateway.php:45
+msgid "Enable crypto payments with NoncePay"
+msgstr "NoncePay ile kripto ödemelerini etkinleştir"
+
+#: includes/class-noncepay-gateway.php:49
+msgid "Title"
+msgstr "Başlık"
+
+#: includes/class-noncepay-gateway.php:51
+msgid "Payment method name shown at checkout."
+msgstr "Ödeme sırasında gösterilen ödeme yöntemi adı."
+
+#: includes/class-noncepay-gateway.php:52
+msgid "Crypto (USDT, USDC, BTC, ETH and more)"
+msgstr "Kripto (USDT, USDC, BTC, ETH ve daha fazlası)"
+
+#: includes/class-noncepay-gateway.php:56
+msgid "Description"
+msgstr "Açıklama"
+
+#: includes/class-noncepay-gateway.php:58
+msgid "Text shown under the payment method at checkout."
+msgstr "Ödeme sırasında ödeme yönteminin altında gösterilen metin."
+
+#: includes/class-noncepay-gateway.php:59
+msgid ""
+"Pay with a cryptocurrency from any wallet or exchange. The payment address "
+"and exact amount are shown after you place the order."
+msgstr ""
+"Herhangi bir cüzdan veya borsadan kripto para ile ödeyin. Ödeme adresi ve tam"
+" tutar, siparişi verdikten sonra gösterilir."
+
+#: includes/class-noncepay-gateway.php:63
+msgid "Accepted coins"
+msgstr "Kabul edilen kripto paralar"
+
+#: includes/class-noncepay-gateway.php:65
+msgid ""
+"Enter your receiving wallet for each coin you accept. A coin is offered at "
+"checkout only when it has a wallet. Payments are forwarded to these "
+"addresses."
+msgstr ""
+"Kabul ettiğiniz her kripto para için alıcı cüzdanınızı girin. Bir kripto "
+"para, ödeme sırasında yalnızca bir cüzdanı varsa sunulur. Ödemeler bu "
+"adreslere aktarılır."
+
+#: includes/class-noncepay-gateway.php:69
+msgid "Underpayment tolerance (%)"
+msgstr "Eksik ödeme toleransı (%)"
+
+#: includes/class-noncepay-gateway.php:71
+msgid ""
+"An order is marked paid when the customer sent at least the quoted amount "
+"minus this percentage. Covers wallets that round amounts."
+msgstr ""
+"Müşteri, teklif edilen tutardan bu yüzde düşüldükten sonra kalan miktarı en "
+"az gönderdiğinde sipariş ödendi olarak işaretlenir. Tutarları yuvarlayan "
+"cüzdanlar içindir."
+
+#: includes/class-noncepay-gateway.php:76
+msgid "Quote validity (minutes)"
+msgstr "Teklif geçerlilik süresi (dakika)"
+
+#: includes/class-noncepay-gateway.php:78
+msgid ""
+"How long the exchange rate shown to the customer is guaranteed. Payments sent"
+" later are still credited, and held for review when short."
+msgstr ""
+"Müşteriye gösterilen kurun ne kadar süre garanti edildiği. Daha sonra "
+"gönderilen ödemeler yine de hesaba geçirilir; eksikse incelenmek üzere "
+"bekletilir."
+
+#: includes/class-noncepay-gateway.php:88
+msgid "Order status when paid"
+msgstr "Ödendiğinde sipariş durumu"
+
+#: includes/class-noncepay-gateway.php:91
+msgctxt "Order status"
+msgid "Processing"
+msgstr "İşleniyor"
+
+#: includes/class-noncepay-gateway.php:92
+msgctxt "Order status"
+msgid "Completed"
+msgstr "Tamamlandı"
+
+#: includes/class-noncepay-gateway.php:95
+msgid "Orders of virtual and downloadable products are always completed."
+msgstr "Sanal ve indirilebilir ürünlerin siparişleri her zaman tamamlanır."
+
+#: includes/class-noncepay-gateway.php:99
+msgid "Debug log"
+msgstr "Hata ayıklama günlüğü"
+
+#: includes/class-noncepay-gateway.php:101
+msgid "Log API calls and callbacks"
+msgstr "API çağrılarını ve geri çağrıları günlüğe kaydet"
+
+#. translators: %s: log source name
+#: includes/class-noncepay-gateway.php:104
+#, php-format
+msgid ""
+"Logs are under WooCommerce > Status > Logs, source %s. Errors are always "
+"logged."
+msgstr ""
+"Günlükler WooCommerce > Durum > Günlükler altında, %s kaynağındadır. Hatalar "
+"her zaman günlüğe kaydedilir."
+
+#. translators: %s: currency code
+#: includes/class-noncepay-gateway.php:115
+#, php-format
+msgid ""
+"Your store currency (%s) cannot be converted to crypto by NoncePay. Customers"
+" will not be able to pay with this gateway."
+msgstr ""
+"Mağaza para biriminiz (%s) NoncePay tarafından kriptoya dönüştürülemiyor. "
+"Müşteriler bu ödeme geçidiyle ödeme yapamayacak."
+
+#: includes/class-noncepay-gateway.php:118
+msgid ""
+"Add at least one wallet below: the gateway is hidden at checkout until a coin"
+" has a wallet."
+msgstr ""
+"Aşağıya en az bir cüzdan ekleyin: bir kripto paranın cüzdanı olana kadar "
+"ödeme geçidi ödeme sırasında gizli kalır."
+
+#: includes/class-noncepay-gateway.php:155
+#: includes/class-noncepay-payment-page.php:135
+msgid "Coin"
+msgstr "Kripto para"
+
+#: includes/class-noncepay-gateway.php:155
+msgid "Your receiving wallet"
+msgstr "Alıcı cüzdanınız"
+
+#: includes/class-noncepay-gateway.php:155
+msgid "Minimum payment"
+msgstr "Minimum ödeme"
+
+#. translators: %d: number of coins
+#: includes/class-noncepay-gateway.php:168
+#, php-format
+msgid "%d more coin"
+msgid_plural "%d more coins"
+msgstr[0] "%d kripto para daha"
+msgstr[1] "%d kripto para daha"
+
+#: includes/class-noncepay-gateway.php:174
+msgid ""
+"Use an address you control on that exact network. One EVM address (0x...) "
+"works for every EVM network; the same applies to Tron and Solana."
+msgstr ""
+"Tam olarak o ağda kontrol ettiğiniz bir adres kullanın. Tek bir EVM adresi "
+"(0x...) tüm EVM ağlarında çalışır; aynısı Tron ve Solana için de geçerlidir."
+
+#. translators: 1: coin label, 2: address
+#: includes/class-noncepay-gateway.php:202
+#, php-format
+msgid ""
+"The %1$s wallet \"%2$s\" does not look like a valid address for that network "
+"and was not saved."
+msgstr ""
+"%1$s cüzdanı \"%2$s\" bu ağ için geçerli bir adres gibi görünmüyor ve "
+"kaydedilmedi."
+
+#: includes/class-noncepay-gateway.php:220
+msgid "The underpayment tolerance must be a number between 0 and 50."
+msgstr "Eksik ödeme toleransı 0 ile 50 arasında bir sayı olmalıdır."
+
+#: includes/class-noncepay-gateway.php:290
+msgid "No cryptocurrency is available right now."
+msgstr "Şu anda kullanılabilir kripto para yok."
+
+#: includes/class-noncepay-gateway.php:293 assets/js/checkout-blocks.js:69
+msgid "Pay with"
+msgstr "Ödeme yapılacak kripto para"
+
+#: includes/class-noncepay-gateway.php:293
+msgid "required"
+msgstr "gerekli"
+
+#: includes/class-noncepay-gateway.php:308
+#: includes/class-noncepay-gateway.php:326 assets/js/checkout-blocks.js:47
+msgid "Please choose a cryptocurrency to pay with."
+msgstr "Lütfen ödeme yapmak için bir kripto para seçin."
+
+#: includes/class-noncepay-gateway.php:331 includes/class-noncepay-rest.php:131
+msgid "Please try again in a moment."
+msgstr "Lütfen birazdan tekrar deneyin."
+
+#: includes/class-noncepay-gateway.php:343
+msgid ""
+"A payment was already detected for this order in another cryptocurrency. "
+"Please complete it with the same coin."
+msgstr ""
+"Bu sipariş için başka bir kripto parayla yapılmış bir ödeme zaten algılandı. "
+"Lütfen ödemeyi aynı kripto parayla tamamlayın."
+
+#: includes/class-noncepay-order.php:81
+msgid "Please choose a supported cryptocurrency."
+msgstr "Lütfen desteklenen bir kripto para seçin."
+
+#. translators: 1: amount, 2: coin label, 3: payment address
+#: includes/class-noncepay-order.php:143
+#, php-format
+msgid "NoncePay: awaiting %1$s %2$s on %3$s."
+msgstr "NoncePay: %3$s adresine %1$s %2$s bekleniyor."
+
+#. translators: 1: amount, 2: coin label
+#: includes/class-noncepay-order.php:170
+#, php-format
+msgid "NoncePay: quote refreshed to %1$s %2$s."
+msgstr "NoncePay: teklif %1$s %2$s olarak yenilendi."
+
+#. translators: 1: amount, 2: coin label, 3: transaction id
+#: includes/class-noncepay-order.php:237
+#, php-format
+msgid ""
+"NoncePay: payment of %1$s %2$s seen on chain (txid_in %3$s), waiting for "
+"confirmations."
+msgstr ""
+"NoncePay: %1$s %2$s tutarındaki ödeme zincirde görüldü (txid_in %3$s), "
+"onaylar bekleniyor."
+
+#: includes/class-noncepay-order.php:257
+msgid ""
+"NoncePay: a confirmed payment arrived with an unreadable amount and was not "
+"credited. Check your wallet and review the order manually."
+msgstr ""
+"NoncePay: onaylanmış bir ödeme okunamayan bir tutarla geldi ve hesaba "
+"geçirilmedi. Cüzdanınızı kontrol edin ve siparişi elle inceleyin."
+
+#. translators: 1: amount, 2: coin label, 3: transaction id
+#: includes/class-noncepay-order.php:267
+#, php-format
+msgid ""
+"NoncePay: a confirmed payment of %1$s %2$s (txid_in %3$s) arrived without a "
+"forwarding transaction and was not credited. Check your wallet and review the"
+" order manually."
+msgstr ""
+"NoncePay: %1$s %2$s tutarındaki onaylanmış bir ödeme (txid_in %3$s) aktarım "
+"işlemi olmadan geldi ve hesaba geçirilmedi. Cüzdanınızı kontrol edin ve "
+"siparişi elle inceleyin."
+
+#. translators: 1: amount, 2: coin label, 3: txid_in, 4: amount forwarded, 5:
+#. txid_out, 6: total received, 7: total expected
+#: includes/class-noncepay-order.php:285
+#, php-format
+msgid ""
+"NoncePay: payment of %1$s %2$s confirmed (txid_in %3$s). %4$s forwarded to "
+"your wallet (txid_out %5$s). Received so far: %6$s of %7$s."
+msgstr ""
+"NoncePay: %1$s %2$s tutarındaki ödeme onaylandı (txid_in %3$s). %4$s "
+"cüzdanınıza aktarıldı (txid_out %5$s). Şu ana kadar alınan: %6$s / %7$s."
+
+#: includes/class-noncepay-order.php:314
+msgid ""
+"NoncePay: an extra payment arrived on an order that is already paid. Refund "
+"the customer from your wallet if needed."
+msgstr ""
+"NoncePay: zaten ödenmiş bir siparişe ek bir ödeme geldi. Gerekirse müşteriye "
+"cüzdanınızdan iade yapın."
+
+#: includes/class-noncepay-order.php:319
+msgid "NoncePay: the quoted amount is missing, review the order manually."
+msgstr "NoncePay: teklif edilen tutar eksik, siparişi elle inceleyin."
+
+#. translators: 1: amount over, 2: coin label
+#: includes/class-noncepay-order.php:339
+#, php-format
+msgid "NoncePay: overpaid by %1$s %2$s."
+msgstr "NoncePay: %1$s %2$s fazla ödendi."
+
+#: includes/class-noncepay-order.php:342
+msgid ""
+"NoncePay: the quoted amount was received, but the order had been cancelled "
+"before the payment arrived. Review it manually: restore the order or refund "
+"the customer from your wallet."
+msgstr ""
+"NoncePay: teklif edilen tutar alındı, ancak sipariş ödeme gelmeden önce iptal"
+" edilmişti. Elle inceleyin: siparişi geri yükleyin veya müşteriye "
+"cüzdanınızdan iade yapın."
+
+#: includes/class-noncepay-order.php:354
+msgid ""
+"NoncePay: part of the payment was sent after the quote expired and the "
+"current rate could not be checked. Review it manually."
+msgstr ""
+"NoncePay: ödemenin bir kısmı teklifin süresi dolduktan sonra gönderildi ve "
+"güncel kur kontrol edilemedi. Elle inceleyin."
+
+#. translators: 1: amount received, 2: coin label, 3: amount the order total
+#. is worth now
+#: includes/class-noncepay-order.php:359
+#, php-format
+msgid ""
+"NoncePay: part of the payment was sent after the quote expired and is now "
+"worth less than the order total (%1$s %2$s received, %3$s needed at the "
+"current rate). Review it manually."
+msgstr ""
+"NoncePay: ödemenin bir kısmı teklifin süresi dolduktan sonra gönderildi ve "
+"artık sipariş toplamından daha az değerde (%1$s %2$s alındı, güncel kurla "
+"%3$s gerekiyor). Elle inceleyin."
+
+#: includes/class-noncepay-order.php:362
+msgid ""
+"NoncePay: part of the payment was sent after the quote expired. It still "
+"covers the order total at the current rate, so the order is marked paid."
+msgstr ""
+"NoncePay: ödemenin bir kısmı teklifin süresi dolduktan sonra gönderildi. "
+"Güncel kurla sipariş toplamını hâlâ karşıladığı için sipariş ödendi olarak "
+"işaretlendi."
+
+#. translators: 1: amount received, 2: amount expected, 3: coin label, 4:
+#. amount missing
+#: includes/class-noncepay-order.php:371
+#, php-format
+msgid ""
+"NoncePay: payment received after the quote expired and below the quoted "
+"amount (%1$s of %2$s %3$s, %4$s missing). Review it manually."
+msgstr ""
+"NoncePay: ödeme teklifin süresi dolduktan sonra ve teklif edilen tutarın "
+"altında alındı (%1$s / %2$s %3$s, %4$s eksik). Elle inceleyin."
+
+#. translators: 1: amount received, 2: amount expected, 3: coin label, 4:
+#. amount missing
+#: includes/class-noncepay-order.php:374
+#, php-format
+msgid ""
+"NoncePay: underpaid, %1$s of %2$s %3$s received (%4$s missing). The order "
+"stays on hold until the rest arrives."
+msgstr ""
+"NoncePay: eksik ödeme, %1$s / %2$s %3$s alındı (%4$s eksik). Kalanı gelene "
+"kadar sipariş beklemede kalır."
+
+#. translators: 1: amount, 2: coin label, 3: address
+#: includes/class-noncepay-order.php:416
+#, php-format
+msgid ""
+"NoncePay: a payment of %1$s %2$s arrived on %3$s, an address quoted earlier "
+"for this order. It is not credited automatically: review it manually."
+msgstr ""
+"NoncePay: bu sipariş için daha önce verilmiş bir adres olan %3$s adresine "
+"%1$s %2$s tutarında bir ödeme geldi. Otomatik olarak hesaba geçirilmez: elle "
+"inceleyin."
+
+#: includes/class-noncepay-order.php:546
+msgid ""
+"This cryptocurrency is temporarily unavailable. Please choose another one."
+msgstr ""
+"Bu kripto para geçici olarak kullanılamıyor. Lütfen başka birini seçin."
+
+#: includes/class-noncepay-order.php:595
+msgid "This order has nothing to pay."
+msgstr "Bu siparişte ödenecek bir tutar yok."
+
+#. translators: %s: currency code
+#: includes/class-noncepay-order.php:604
+#, php-format
+msgid ""
+"Crypto payments are not available for prices in %s. Please choose another "
+"payment method."
+msgstr ""
+"Kripto ödemeleri %s cinsinden fiyatlar için kullanılamaz. Lütfen başka bir "
+"ödeme yöntemi seçin."
+
+#. translators: 1: coin label, 2: minimum amount, 3: coin symbol
+#: includes/class-noncepay-order.php:663
+#, php-format
+msgid ""
+"The order total is below the minimum payment for %1$s (%2$s %3$s). Please "
+"choose another cryptocurrency."
+msgstr ""
+"Sipariş toplamı, %1$s için minimum ödemenin (%2$s %3$s) altında. Lütfen başka"
+" bir kripto para seçin."
+
+#: includes/class-noncepay-order.php:677
+msgid ""
+"The crypto payment could not be prepared. Please try again or choose another "
+"payment method."
+msgstr ""
+"Kripto ödemesi hazırlanamadı. Lütfen tekrar deneyin veya başka bir ödeme "
+"yöntemi seçin."
+
+#: includes/class-noncepay-payment-page.php:73
+msgid "Complete your crypto payment"
+msgstr "Kripto ödemenizi tamamlayın"
+
+#: includes/class-noncepay-payment-page.php:83
+msgid "Payment QR code"
+msgstr "Ödeme QR kodu"
+
+#: includes/class-noncepay-payment-page.php:88 assets/js/payment.js:39
+msgid "Amount still to send"
+msgstr "Gönderilecek kalan tutar"
+
+#: includes/class-noncepay-payment-page.php:88 assets/js/payment.js:40
+msgid "Amount to send"
+msgstr "Gönderilecek tutar"
+
+#: includes/class-noncepay-payment-page.php:92
+#: includes/class-noncepay-payment-page.php:99
+msgid "Copy"
+msgstr "Kopyala"
+
+#: includes/class-noncepay-payment-page.php:96
+#: includes/class-noncepay-payment-page.php:136
+msgid "Payment address"
+msgstr "Ödeme adresi"
+
+#. translators: 1: amount still missing, 2: minimum payment, 3: coin symbol
+#: includes/class-noncepay-payment-page.php:105 assets/js/payment.js:47
+#, php-format, js-format
+msgid ""
+"Only %1$s %3$s is missing, but payments below %2$s %3$s cannot be processed. "
+"Send at least %2$s %3$s: the extra is noted on your order."
+msgstr ""
+"Yalnızca %1$s %3$s eksik, ancak %2$s %3$s altındaki ödemeler işlenemez. En az"
+" %2$s %3$s gönderin: fazlası siparişinize not edilir."
+
+#. translators: 1: coin symbol, 2: network name
+#: includes/class-noncepay-payment-page.php:111
+#, php-format
+msgid ""
+"Send only %1$s on the %2$s network to this address. Any other coin or network"
+" will be lost."
+msgstr ""
+"Bu adrese yalnızca %2$s ağında %1$s gönderin. Başka bir kripto para veya ağ "
+"ile gönderilenler kaybolur."
+
+#: includes/class-noncepay-payment-page.php:115
+msgid "Get a new quote"
+msgstr "Yeni teklif al"
+
+#: includes/class-noncepay-payment-page.php:119
+msgid ""
+"Send the exact amount, network fees on top. This page updates by itself once "
+"the payment is seen on the blockchain."
+msgstr ""
+"Tam tutarı gönderin, ağ ücretleri buna ek olarak ödenir. Ödeme blokzincirde "
+"görüldüğünde bu sayfa kendiliğinden güncellenir."
+
+#: includes/class-noncepay-payment-page.php:137
+msgid "Quoted amount"
+msgstr "Teklif edilen tutar"
+
+#: includes/class-noncepay-payment-page.php:138
+msgid "Received"
+msgstr "Alınan"
+
+#: includes/class-noncepay-payment-page.php:139
+msgid "Quote valid until"
+msgstr "Teklif geçerlilik bitişi"
+
+#: includes/class-noncepay-payment-page.php:170 assets/js/payment.js:22
+msgid "Waiting for your payment"
+msgstr "Ödemeniz bekleniyor"
+
+#: includes/class-noncepay-payment-page.php:171 assets/js/payment.js:23
+msgid "Payment seen, waiting for confirmations"
+msgstr "Ödeme görüldü, onaylar bekleniyor"
+
+#: includes/class-noncepay-payment-page.php:172 assets/js/payment.js:24
+msgid "Partial payment received"
+msgstr "Kısmi ödeme alındı"
+
+#: includes/class-noncepay-payment-page.php:173 assets/js/payment.js:25
+msgid "Payment confirmed. Thank you!"
+msgstr "Ödeme onaylandı. Teşekkürler!"
+
+#: includes/class-noncepay-payment-page.php:174 assets/js/payment.js:26
+msgid "This quote has expired"
+msgstr "Bu teklifin süresi doldu"
+
+#: includes/class-noncepay-payment-page.php:175 assets/js/payment.js:27
+msgid "This order is cancelled"
+msgstr "Bu sipariş iptal edildi"
+
+#: includes/class-noncepay-rest.php:137
+msgid "This quote cannot be refreshed."
+msgstr "Bu teklif yenilenemez."
+
+#: includes/class-noncepay-rest.php:222
+msgid "Order not found."
+msgstr "Sipariş bulunamadı."
+
+#: noncepay-for-woocommerce.php:113
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: noncepay-for-woocommerce.php:121
+msgid ""
+"NoncePay for WooCommerce requires WooCommerce to be installed and active."
+msgstr ""
+"NoncePay for WooCommerce, WooCommerce'in kurulu ve etkin olmasını gerektirir."
+
+#: assets/js/checkout-blocks.js:27
+msgid "Crypto"
+msgstr "Kripto"
+
+#: assets/js/payment.js:70
+msgid ""
+"The exchange rate is no longer guaranteed. Get a new quote before paying."
+msgstr "Kur artık garanti edilmiyor. Ödeme yapmadan önce yeni bir teklif alın."
+
+#. translators: %s: remaining time as mm:ss
+#: assets/js/payment.js:86
+#, js-format
+msgid "Rate guaranteed for %s"
+msgstr "Kur %s süreyle garantili"
+
+#: assets/js/payment.js:128
+msgid "Copied"
+msgstr "Kopyalandı"

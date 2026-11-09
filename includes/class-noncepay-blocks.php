@@ -51,7 +51,7 @@ final class NoncePay_Blocks extends AbstractPaymentMethodType {
 			NONCEPAY_VERSION,
 			true
 		);
-		wp_set_script_translations( 'noncepay-blocks', 'noncepay-for-woocommerce' );
+		wp_set_script_translations( 'noncepay-blocks', 'noncepay-for-woocommerce', NONCEPAY_DIR . 'languages' );
 		return array( 'noncepay-blocks' );
 	}
 

@@ -1,0 +1,582 @@
+# Copyright (C) 2026 NoncePay
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: NoncePay – Crypto Payment Gateway for WooCommerce 1.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/noncepay-for-woocommerce\n"
+"POT-Creation-Date: 2026-11-08T15:12:56+00:00\n"
+"PO-Revision-Date: 2026-11-09 16:43+0000\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: noncepay-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: noncepay-for-woocommerce.php
+msgid "NoncePay – Crypto Payment Gateway for WooCommerce"
+msgstr "NoncePay – WooCommerce 加密货币支付网关"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: noncepay-for-woocommerce.php
+msgid "https://noncepay.app/"
+msgstr "https://noncepay.app/"
+
+#. Description of the plugin
+#: noncepay-for-woocommerce.php
+msgid ""
+"Accept crypto payments (USDT, USDC, BTC, ETH, SOL and more) sent straight to "
+"your own wallets. Non-custodial, no account, no API key."
+msgstr "接受加密货币付款（USDT、USDC、BTC、ETH、SOL 等），资金直接进入您自己的钱包。非托管，无需账户，无需 API 密钥。"
+
+#. Author of the plugin
+#: noncepay-for-woocommerce.php includes/class-noncepay-payment-page.php:141
+msgid "NoncePay"
+msgstr "NoncePay"
+
+#: includes/class-noncepay-api.php:158
+msgid ""
+"The crypto payment service is unreachable. Please try again in a moment."
+msgstr "加密货币支付服务无法访问。请稍后重试。"
+
+#: includes/class-noncepay-api.php:166
+msgid ""
+"The crypto payment service returned an unexpected response. Please try again "
+"in a moment."
+msgstr "加密货币支付服务返回了意外的响应。请稍后重试。"
+
+#. translators: 1: coin symbol, 2: network name
+#: includes/class-noncepay-coins.php:95
+#, php-format
+msgid "%1$s (%2$s)"
+msgstr "%1$s (%2$s)"
+
+#: includes/class-noncepay-coins.php:235
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+#: includes/class-noncepay-coins.php:236
+msgid "Ethereum"
+msgstr "Ethereum"
+
+#: includes/class-noncepay-coins.php:237
+msgid "Ethereum ERC-20"
+msgstr "Ethereum ERC-20"
+
+#: includes/class-noncepay-coins.php:238
+msgid "BNB Smart Chain BEP-20"
+msgstr "BNB Smart Chain BEP-20"
+
+#: includes/class-noncepay-coins.php:239
+msgid "Tron"
+msgstr "Tron"
+
+#: includes/class-noncepay-coins.php:240
+msgid "Tron TRC-20"
+msgstr "Tron TRC-20"
+
+#: includes/class-noncepay-coins.php:241
+msgid "Polygon"
+msgstr "Polygon"
+
+#: includes/class-noncepay-coins.php:242
+msgid "Base"
+msgstr "Base"
+
+#: includes/class-noncepay-coins.php:243
+msgid "Arbitrum One"
+msgstr "Arbitrum One"
+
+#: includes/class-noncepay-coins.php:244
+msgid "Optimism"
+msgstr "Optimism"
+
+#: includes/class-noncepay-coins.php:245
+msgid "Avalanche C-Chain"
+msgstr "Avalanche C-Chain"
+
+#: includes/class-noncepay-coins.php:246
+msgid "Solana"
+msgstr "Solana"
+
+#: includes/class-noncepay-coins.php:247
+msgid "Litecoin"
+msgstr "Litecoin"
+
+#: includes/class-noncepay-coins.php:248
+msgid "Bitcoin Cash"
+msgstr "Bitcoin Cash"
+
+#: includes/class-noncepay-coins.php:249
+msgid "Dogecoin"
+msgstr "Dogecoin"
+
+#: includes/class-noncepay-gateway.php:23
+msgid "NoncePay (crypto)"
+msgstr "NoncePay（加密货币）"
+
+#: includes/class-noncepay-gateway.php:24
+msgid ""
+"Accept USDT, USDC, BTC, ETH, SOL and more. Each payment is forwarded straight"
+" to your own wallet: no account, no API key, no custody. NoncePay deducts its"
+" 1.25% fee from what reaches your wallet."
+msgstr ""
+"接受 USDT、USDC、BTC、ETH、SOL 等。每笔付款都直接转发到您自己的钱包：无需账户，无需 API 密钥，无托管。NoncePay "
+"从到达您钱包的金额中扣除 1.25% 的手续费。"
+
+#: includes/class-noncepay-gateway.php:43
+msgid "Enable/Disable"
+msgstr "启用/禁用"
+
+#: includes/class-noncepay-gateway.php:45
+msgid "Enable crypto payments with NoncePay"
+msgstr "启用 NoncePay 加密货币支付"
+
+#: includes/class-noncepay-gateway.php:49
+msgid "Title"
+msgstr "标题"
+
+#: includes/class-noncepay-gateway.php:51
+msgid "Payment method name shown at checkout."
+msgstr "结账时显示的支付方式名称。"
+
+#: includes/class-noncepay-gateway.php:52
+msgid "Crypto (USDT, USDC, BTC, ETH and more)"
+msgstr "加密货币（USDT、USDC、BTC、ETH 等）"
+
+#: includes/class-noncepay-gateway.php:56
+msgid "Description"
+msgstr "描述"
+
+#: includes/class-noncepay-gateway.php:58
+msgid "Text shown under the payment method at checkout."
+msgstr "结账时显示在支付方式下方的文字。"
+
+#: includes/class-noncepay-gateway.php:59
+msgid ""
+"Pay with a cryptocurrency from any wallet or exchange. The payment address "
+"and exact amount are shown after you place the order."
+msgstr "使用任意钱包或交易所的加密货币付款。下单后将显示付款地址和确切金额。"
+
+#: includes/class-noncepay-gateway.php:63
+msgid "Accepted coins"
+msgstr "接受的币种"
+
+#: includes/class-noncepay-gateway.php:65
+msgid ""
+"Enter your receiving wallet for each coin you accept. A coin is offered at "
+"checkout only when it has a wallet. Payments are forwarded to these "
+"addresses."
+msgstr "为您接受的每种币种填写收款钱包。只有设置了钱包的币种才会在结账时提供。付款将转发到这些地址。"
+
+#: includes/class-noncepay-gateway.php:69
+msgid "Underpayment tolerance (%)"
+msgstr "少付容差（%）"
+
+#: includes/class-noncepay-gateway.php:71
+msgid ""
+"An order is marked paid when the customer sent at least the quoted amount "
+"minus this percentage. Covers wallets that round amounts."
+msgstr "当客户发送的金额至少达到报价金额减去此百分比时，订单将被标记为已付款。用于兼容会对金额取整的钱包。"
+
+#: includes/class-noncepay-gateway.php:76
+msgid "Quote validity (minutes)"
+msgstr "报价有效期（分钟）"
+
+#: includes/class-noncepay-gateway.php:78
+msgid ""
+"How long the exchange rate shown to the customer is guaranteed. Payments sent"
+" later are still credited, and held for review when short."
+msgstr "向客户显示的汇率的保证时长。之后发送的付款仍会入账，如有不足则暂停以待审核。"
+
+#: includes/class-noncepay-gateway.php:88
+msgid "Order status when paid"
+msgstr "付款后的订单状态"
+
+#: includes/class-noncepay-gateway.php:91
+msgctxt "Order status"
+msgid "Processing"
+msgstr "处理中"
+
+#: includes/class-noncepay-gateway.php:92
+msgctxt "Order status"
+msgid "Completed"
+msgstr "已完成"
+
+#: includes/class-noncepay-gateway.php:95
+msgid "Orders of virtual and downloadable products are always completed."
+msgstr "虚拟和可下载产品的订单始终标记为已完成。"
+
+#: includes/class-noncepay-gateway.php:99
+msgid "Debug log"
+msgstr "调试日志"
+
+#: includes/class-noncepay-gateway.php:101
+msgid "Log API calls and callbacks"
+msgstr "记录 API 调用和回调"
+
+#. translators: %s: log source name
+#: includes/class-noncepay-gateway.php:104
+#, php-format
+msgid ""
+"Logs are under WooCommerce > Status > Logs, source %s. Errors are always "
+"logged."
+msgstr "日志位于 WooCommerce > 状态 > 日志，来源为 %s。错误始终会被记录。"
+
+#. translators: %s: currency code
+#: includes/class-noncepay-gateway.php:115
+#, php-format
+msgid ""
+"Your store currency (%s) cannot be converted to crypto by NoncePay. Customers"
+" will not be able to pay with this gateway."
+msgstr "NoncePay 无法将您的商店货币（%s）转换为加密货币。客户将无法使用此支付网关付款。"
+
+#: includes/class-noncepay-gateway.php:118
+msgid ""
+"Add at least one wallet below: the gateway is hidden at checkout until a coin"
+" has a wallet."
+msgstr "请在下方至少添加一个钱包：在有币种设置钱包之前，此支付网关在结账时将被隐藏。"
+
+#: includes/class-noncepay-gateway.php:155
+#: includes/class-noncepay-payment-page.php:135
+msgid "Coin"
+msgstr "币种"
+
+#: includes/class-noncepay-gateway.php:155
+msgid "Your receiving wallet"
+msgstr "您的收款钱包"
+
+#: includes/class-noncepay-gateway.php:155
+msgid "Minimum payment"
+msgstr "最低付款额"
+
+#. translators: %d: number of coins
+#: includes/class-noncepay-gateway.php:168
+#, php-format
+msgid "%d more coin"
+msgid_plural "%d more coins"
+msgstr[0] "其他 %d 种币种"
+
+#: includes/class-noncepay-gateway.php:174
+msgid ""
+"Use an address you control on that exact network. One EVM address (0x...) "
+"works for every EVM network; the same applies to Tron and Solana."
+msgstr "请使用您在该网络上控制的地址。一个 EVM 地址（0x...）适用于所有 EVM 网络；Tron 和 Solana 同理。"
+
+#. translators: 1: coin label, 2: address
+#: includes/class-noncepay-gateway.php:202
+#, php-format
+msgid ""
+"The %1$s wallet \"%2$s\" does not look like a valid address for that network "
+"and was not saved."
+msgstr "%1$s 钱包“%2$s”似乎不是该网络的有效地址，未保存。"
+
+#: includes/class-noncepay-gateway.php:220
+msgid "The underpayment tolerance must be a number between 0 and 50."
+msgstr "少付容差必须是 0 到 50 之间的数字。"
+
+#: includes/class-noncepay-gateway.php:290
+msgid "No cryptocurrency is available right now."
+msgstr "目前没有可用的加密货币。"
+
+#: includes/class-noncepay-gateway.php:293 assets/js/checkout-blocks.js:69
+msgid "Pay with"
+msgstr "支付币种"
+
+#: includes/class-noncepay-gateway.php:293
+msgid "required"
+msgstr "必填"
+
+#: includes/class-noncepay-gateway.php:308
+#: includes/class-noncepay-gateway.php:326 assets/js/checkout-blocks.js:47
+msgid "Please choose a cryptocurrency to pay with."
+msgstr "请选择用于付款的加密货币。"
+
+#: includes/class-noncepay-gateway.php:331 includes/class-noncepay-rest.php:131
+msgid "Please try again in a moment."
+msgstr "请稍后重试。"
+
+#: includes/class-noncepay-gateway.php:343
+msgid ""
+"A payment was already detected for this order in another cryptocurrency. "
+"Please complete it with the same coin."
+msgstr "此订单已检测到使用另一种加密货币的付款。请使用同一币种完成付款。"
+
+#: includes/class-noncepay-order.php:81
+msgid "Please choose a supported cryptocurrency."
+msgstr "请选择受支持的加密货币。"
+
+#. translators: 1: amount, 2: coin label, 3: payment address
+#: includes/class-noncepay-order.php:143
+#, php-format
+msgid "NoncePay: awaiting %1$s %2$s on %3$s."
+msgstr "NoncePay：等待 %1$s %2$s 付款至 %3$s。"
+
+#. translators: 1: amount, 2: coin label
+#: includes/class-noncepay-order.php:170
+#, php-format
+msgid "NoncePay: quote refreshed to %1$s %2$s."
+msgstr "NoncePay：报价已更新为 %1$s %2$s。"
+
+#. translators: 1: amount, 2: coin label, 3: transaction id
+#: includes/class-noncepay-order.php:237
+#, php-format
+msgid ""
+"NoncePay: payment of %1$s %2$s seen on chain (txid_in %3$s), waiting for "
+"confirmations."
+msgstr "NoncePay：已在链上检测到 %1$s %2$s 的付款（txid_in %3$s），等待确认。"
+
+#: includes/class-noncepay-order.php:257
+msgid ""
+"NoncePay: a confirmed payment arrived with an unreadable amount and was not "
+"credited. Check your wallet and review the order manually."
+msgstr "NoncePay：收到一笔已确认的付款，但金额无法读取，未入账。请检查您的钱包并手动审核此订单。"
+
+#. translators: 1: amount, 2: coin label, 3: transaction id
+#: includes/class-noncepay-order.php:267
+#, php-format
+msgid ""
+"NoncePay: a confirmed payment of %1$s %2$s (txid_in %3$s) arrived without a "
+"forwarding transaction and was not credited. Check your wallet and review the"
+" order manually."
+msgstr ""
+"NoncePay：收到一笔 %1$s %2$s 的已确认付款（txid_in %3$s），但没有转发交易，未入账。请检查您的钱包并手动审核此订单。"
+
+#. translators: 1: amount, 2: coin label, 3: txid_in, 4: amount forwarded, 5:
+#. txid_out, 6: total received, 7: total expected
+#: includes/class-noncepay-order.php:285
+#, php-format
+msgid ""
+"NoncePay: payment of %1$s %2$s confirmed (txid_in %3$s). %4$s forwarded to "
+"your wallet (txid_out %5$s). Received so far: %6$s of %7$s."
+msgstr ""
+"NoncePay：%1$s %2$s 的付款已确认（txid_in %3$s）。%4$s 已转发到您的钱包（txid_out "
+"%5$s）。目前已收到：%6$s / %7$s。"
+
+#: includes/class-noncepay-order.php:314
+msgid ""
+"NoncePay: an extra payment arrived on an order that is already paid. Refund "
+"the customer from your wallet if needed."
+msgstr "NoncePay：已付款的订单收到一笔额外付款。如有需要，请从您的钱包向客户退款。"
+
+#: includes/class-noncepay-order.php:319
+msgid "NoncePay: the quoted amount is missing, review the order manually."
+msgstr "NoncePay：缺少报价金额，请手动审核此订单。"
+
+#. translators: 1: amount over, 2: coin label
+#: includes/class-noncepay-order.php:339
+#, php-format
+msgid "NoncePay: overpaid by %1$s %2$s."
+msgstr "NoncePay：多付了 %1$s %2$s。"
+
+#: includes/class-noncepay-order.php:342
+msgid ""
+"NoncePay: the quoted amount was received, but the order had been cancelled "
+"before the payment arrived. Review it manually: restore the order or refund "
+"the customer from your wallet."
+msgstr "NoncePay：已收到报价金额，但订单在付款到达前已被取消。请手动审核：恢复订单或从您的钱包向客户退款。"
+
+#: includes/class-noncepay-order.php:354
+msgid ""
+"NoncePay: part of the payment was sent after the quote expired and the "
+"current rate could not be checked. Review it manually."
+msgstr "NoncePay：部分付款在报价过期后发送，且无法查询当前汇率。请手动审核。"
+
+#. translators: 1: amount received, 2: coin label, 3: amount the order total
+#. is worth now
+#: includes/class-noncepay-order.php:359
+#, php-format
+msgid ""
+"NoncePay: part of the payment was sent after the quote expired and is now "
+"worth less than the order total (%1$s %2$s received, %3$s needed at the "
+"current rate). Review it manually."
+msgstr "NoncePay：部分付款在报价过期后发送，按当前汇率已低于订单总额（已收到 %1$s %2$s，按当前汇率需要 %3$s）。请手动审核。"
+
+#: includes/class-noncepay-order.php:362
+msgid ""
+"NoncePay: part of the payment was sent after the quote expired. It still "
+"covers the order total at the current rate, so the order is marked paid."
+msgstr "NoncePay：部分付款在报价过期后发送。按当前汇率仍足以支付订单总额，因此订单已标记为已付款。"
+
+#. translators: 1: amount received, 2: amount expected, 3: coin label, 4:
+#. amount missing
+#: includes/class-noncepay-order.php:371
+#, php-format
+msgid ""
+"NoncePay: payment received after the quote expired and below the quoted "
+"amount (%1$s of %2$s %3$s, %4$s missing). Review it manually."
+msgstr "NoncePay：付款在报价过期后收到，且低于报价金额（%1$s / %2$s %3$s，缺少 %4$s）。请手动审核。"
+
+#. translators: 1: amount received, 2: amount expected, 3: coin label, 4:
+#. amount missing
+#: includes/class-noncepay-order.php:374
+#, php-format
+msgid ""
+"NoncePay: underpaid, %1$s of %2$s %3$s received (%4$s missing). The order "
+"stays on hold until the rest arrives."
+msgstr "NoncePay：少付，已收到 %1$s / %2$s %3$s（缺少 %4$s）。在收到剩余款项前，订单将保持“保留”状态。"
+
+#. translators: 1: amount, 2: coin label, 3: address
+#: includes/class-noncepay-order.php:416
+#, php-format
+msgid ""
+"NoncePay: a payment of %1$s %2$s arrived on %3$s, an address quoted earlier "
+"for this order. It is not credited automatically: review it manually."
+msgstr "NoncePay：一笔 %1$s %2$s 的付款到达了 %3$s，这是此前为该订单提供的地址。该付款不会自动入账：请手动审核。"
+
+#: includes/class-noncepay-order.php:546
+msgid ""
+"This cryptocurrency is temporarily unavailable. Please choose another one."
+msgstr "此加密货币暂时不可用。请选择其他加密货币。"
+
+#: includes/class-noncepay-order.php:595
+msgid "This order has nothing to pay."
+msgstr "此订单无需付款。"
+
+#. translators: %s: currency code
+#: includes/class-noncepay-order.php:604
+#, php-format
+msgid ""
+"Crypto payments are not available for prices in %s. Please choose another "
+"payment method."
+msgstr "以 %s 计价的价格不支持加密货币付款。请选择其他支付方式。"
+
+#. translators: 1: coin label, 2: minimum amount, 3: coin symbol
+#: includes/class-noncepay-order.php:663
+#, php-format
+msgid ""
+"The order total is below the minimum payment for %1$s (%2$s %3$s). Please "
+"choose another cryptocurrency."
+msgstr "订单总额低于 %1$s 的最低付款额（%2$s %3$s）。请选择其他加密货币。"
+
+#: includes/class-noncepay-order.php:677
+msgid ""
+"The crypto payment could not be prepared. Please try again or choose another "
+"payment method."
+msgstr "无法准备加密货币付款。请重试或选择其他支付方式。"
+
+#: includes/class-noncepay-payment-page.php:73
+msgid "Complete your crypto payment"
+msgstr "完成您的加密货币付款"
+
+#: includes/class-noncepay-payment-page.php:83
+msgid "Payment QR code"
+msgstr "付款二维码"
+
+#: includes/class-noncepay-payment-page.php:88 assets/js/payment.js:39
+msgid "Amount still to send"
+msgstr "仍需发送的金额"
+
+#: includes/class-noncepay-payment-page.php:88 assets/js/payment.js:40
+msgid "Amount to send"
+msgstr "需发送的金额"
+
+#: includes/class-noncepay-payment-page.php:92
+#: includes/class-noncepay-payment-page.php:99
+msgid "Copy"
+msgstr "复制"
+
+#: includes/class-noncepay-payment-page.php:96
+#: includes/class-noncepay-payment-page.php:136
+msgid "Payment address"
+msgstr "付款地址"
+
+#. translators: 1: amount still missing, 2: minimum payment, 3: coin symbol
+#: includes/class-noncepay-payment-page.php:105 assets/js/payment.js:47
+#, php-format, js-format
+msgid ""
+"Only %1$s %3$s is missing, but payments below %2$s %3$s cannot be processed. "
+"Send at least %2$s %3$s: the extra is noted on your order."
+msgstr "仅差 %1$s %3$s，但低于 %2$s %3$s 的付款无法处理。请至少发送 %2$s %3$s：多出的部分会记录在您的订单中。"
+
+#. translators: 1: coin symbol, 2: network name
+#: includes/class-noncepay-payment-page.php:111
+#, php-format
+msgid ""
+"Send only %1$s on the %2$s network to this address. Any other coin or network"
+" will be lost."
+msgstr "请仅通过 %2$s 网络向此地址发送 %1$s。发送其他币种或使用其他网络将导致资金丢失。"
+
+#: includes/class-noncepay-payment-page.php:115
+msgid "Get a new quote"
+msgstr "获取新报价"
+
+#: includes/class-noncepay-payment-page.php:119
+msgid ""
+"Send the exact amount, network fees on top. This page updates by itself once "
+"the payment is seen on the blockchain."
+msgstr "请发送确切金额，网络手续费另计。一旦在区块链上检测到付款，此页面将自动更新。"
+
+#: includes/class-noncepay-payment-page.php:137
+msgid "Quoted amount"
+msgstr "报价金额"
+
+#: includes/class-noncepay-payment-page.php:138
+msgid "Received"
+msgstr "已收到"
+
+#: includes/class-noncepay-payment-page.php:139
+msgid "Quote valid until"
+msgstr "报价有效期至"
+
+#: includes/class-noncepay-payment-page.php:170 assets/js/payment.js:22
+msgid "Waiting for your payment"
+msgstr "等待您的付款"
+
+#: includes/class-noncepay-payment-page.php:171 assets/js/payment.js:23
+msgid "Payment seen, waiting for confirmations"
+msgstr "已检测到付款，等待确认"
+
+#: includes/class-noncepay-payment-page.php:172 assets/js/payment.js:24
+msgid "Partial payment received"
+msgstr "已收到部分付款"
+
+#: includes/class-noncepay-payment-page.php:173 assets/js/payment.js:25
+msgid "Payment confirmed. Thank you!"
+msgstr "付款已确认。谢谢！"
+
+#: includes/class-noncepay-payment-page.php:174 assets/js/payment.js:26
+msgid "This quote has expired"
+msgstr "此报价已过期"
+
+#: includes/class-noncepay-payment-page.php:175 assets/js/payment.js:27
+msgid "This order is cancelled"
+msgstr "此订单已取消"
+
+#: includes/class-noncepay-rest.php:137
+msgid "This quote cannot be refreshed."
+msgstr "无法刷新此报价。"
+
+#: includes/class-noncepay-rest.php:222
+msgid "Order not found."
+msgstr "未找到订单。"
+
+#: noncepay-for-woocommerce.php:113
+msgid "Settings"
+msgstr "设置"
+
+#: noncepay-for-woocommerce.php:121
+msgid ""
+"NoncePay for WooCommerce requires WooCommerce to be installed and active."
+msgstr "NoncePay for WooCommerce 需要安装并启用 WooCommerce。"
+
+#: assets/js/checkout-blocks.js:27
+msgid "Crypto"
+msgstr "加密货币"
+
+#: assets/js/payment.js:70
+msgid ""
+"The exchange rate is no longer guaranteed. Get a new quote before paying."
+msgstr "汇率已不再保证。请在付款前获取新报价。"
+
+#. translators: %s: remaining time as mm:ss
+#: assets/js/payment.js:86
+#, js-format
+msgid "Rate guaranteed for %s"
+msgstr "汇率保证剩余 %s"
+
+#: assets/js/payment.js:128
+msgid "Copied"
+msgstr "已复制"

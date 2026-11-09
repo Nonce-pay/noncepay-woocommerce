@@ -58,7 +58,7 @@ final class NoncePay_Payment_Page {
 
 		wp_enqueue_style( 'noncepay-payment', NONCEPAY_URL . 'assets/css/payment.css', array(), NONCEPAY_VERSION );
 		wp_enqueue_script( 'noncepay-payment', NONCEPAY_URL . 'assets/js/payment.js', array( 'wp-i18n' ), NONCEPAY_VERSION, true );
-		wp_set_script_translations( 'noncepay-payment', 'noncepay-for-woocommerce' );
+		wp_set_script_translations( 'noncepay-payment', 'noncepay-for-woocommerce', NONCEPAY_DIR . 'languages' );
 
 		$config = array(
 			'statusUrl'  => rest_url( 'noncepay/v1/status' ),

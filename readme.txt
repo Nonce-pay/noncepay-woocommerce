@@ -1,20 +1,36 @@
-=== NoncePay for WooCommerce ===
+=== NoncePay – Crypto Payment Gateway for WooCommerce ===
 Contributors: swartz13
-Tags: crypto, bitcoin, usdt, woocommerce, payment gateway
+Tags: crypto, cryptocurrency, bitcoin, usdt, payment gateway
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Accept USDT, USDC, Bitcoin, Ethereum, Solana and more in WooCommerce. Payments go straight to your own wallets: no account, no API key.
+Crypto payment gateway for WooCommerce. Accept USDT, USDC, Bitcoin, Ethereum and Solana straight to your own wallet. Non-custodial, no account.
 
 == Description ==
 
-NoncePay for WooCommerce adds a crypto payment method to your store. Customers pick a coin at checkout, see the exact amount, a QR code and a unique payment address, and the order updates by itself once the payment is confirmed on the blockchain.
+NoncePay is a crypto payment gateway for WooCommerce. Accept Tether (USDT), USD Coin (USDC), Bitcoin, Ethereum, Solana and more than 80 other cryptocurrencies, and receive every payment directly in your own wallet.
 
-NoncePay is non-custodial: every payment is forwarded automatically to the wallet you entered in the settings. There is no sign-up, no API key, no monthly fee and no withdrawal step.
+Customers pick a coin at checkout, see the exact amount, a QR code and a unique payment address, and the order updates by itself once the payment is confirmed on the blockchain.
+
+NoncePay is non-custodial: every payment is forwarded automatically to the wallet you entered in the settings. We never hold your funds. There is no sign-up, no API key, no monthly fee and no withdrawal step.
+
+= How it works =
+
+1. Enter a receiving wallet for each coin you want to accept.
+2. At checkout, the customer chooses a coin and gets a unique payment address with a QR code.
+3. Once the payment is confirmed on the blockchain, NoncePay forwards it to your wallet and the order is marked paid.
+
+= Supported cryptocurrencies =
+
+* **Stablecoins:** Tether USDT on Tron (TRC-20), BNB Smart Chain (BEP-20), Ethereum (ERC-20) and Polygon; USD Coin USDC on Base, Polygon, Arbitrum, Solana, Ethereum and BNB Smart Chain; DAI, PYUSD and more.
+* **Major coins:** Bitcoin (BTC), Ethereum (ETH), Solana (SOL), Litecoin (LTC), Tron (TRX), BNB, Dogecoin (DOGE), Bitcoin Cash (BCH), Polygon (POL) and Avalanche (AVAX).
+* **Networks:** Bitcoin, Ethereum, BNB Smart Chain, Polygon, Base, Arbitrum, Optimism, Avalanche, Tron, Solana, Litecoin, Bitcoin Cash and Dogecoin.
+
+The full list is at https://noncepay.app/accept/.
 
 = Features =
 
@@ -60,6 +76,18 @@ NoncePay privacy policy: https://noncepay.app/privacy/
 Your store currency must be one NoncePay converts (USD, EUR, GBP, CAD, JPY, CHF, AUD and about thirty others). The settings page warns you when it is not.
 
 == Frequently Asked Questions ==
+
+= How do I accept crypto payments in WooCommerce? =
+
+Install and activate this plugin, go to WooCommerce > Settings > Payments > NoncePay, enter a receiving wallet for each coin and save. Customers can then pay with those coins at checkout.
+
+= How do I accept USDT on Tron (TRC-20) or BNB Smart Chain? =
+
+Enter your Tron address in the "USDT Tron TRC-20" row, or your 0x address in the "USDT BNB Smart Chain BEP-20" row. One 0x address works for every EVM network (Ethereum, BNB Smart Chain, Polygon, Base, Arbitrum, Optimism, Avalanche).
+
+= Is NoncePay custodial? Who holds the funds? =
+
+NoncePay is non-custodial. Each payment address forwards what it receives to the wallet you configured, minus the fee and the network cost. There is no balance to withdraw.
 
 = Do I need an account or an API key? =
 
@@ -114,6 +142,10 @@ No. Payments are already in your wallet: refund the customer from your wallet, t
 
 == Changelog ==
 
+= 1.2.0 =
+* Translations: Chinese (China), Dutch, French, German, Indonesian, Italian, Japanese, Polish, Portuguese (Brazil), Spanish, Turkish and Vietnamese, with their regional variants.
+* Clearer plugin description and supported coin list.
+
 = 1.1.0 =
 * TrezorPay is now NoncePay: new plugin name and slug (`noncepay-for-woocommerce`), API at https://api.noncepay.app, callback route `/wp-json/noncepay/v1/callback`, filters `noncepay_callback_base_url` and `noncepay_api_base_url`, constant `NONCEPAY_PUBLIC_KEY_PEM`.
 
@@ -121,6 +153,9 @@ No. Payments are already in your wallet: refund the customer from your wallet, t
 * First release.
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Adds translations in 12 languages.
 
 = 1.1.0 =
 TrezorPay is now NoncePay. This is a new plugin slug: deactivate and delete TrezorPay for WooCommerce, install this one and enter your wallets again. Finish or cancel open crypto orders first.
