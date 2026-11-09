@@ -344,16 +344,15 @@ class TrezorPay_Gateway extends WC_Payment_Gateway {
 				return array( 'result' => 'failure' );
 			}
 			$started = TrezorPay_Order::start( $order, $ticker, $this->wallets()[ $ticker ], $this->quote_minutes() );
+			if ( ! is_wp_error( $started ) && ! $order->has_status( 'pending' ) ) {
+				$order->update_status( 'pending' );
+			}
 		} finally {
 			TrezorPay_REST::unlock( $order_id );
 		}
 		if ( is_wp_error( $started ) ) {
 			wc_add_notice( $started->get_error_message(), 'error' );
 			return array( 'result' => 'failure' );
-		}
-
-		if ( ! $order->has_status( 'pending' ) ) {
-			$order->update_status( 'pending' );
 		}
 
 		if ( WC()->cart ) {

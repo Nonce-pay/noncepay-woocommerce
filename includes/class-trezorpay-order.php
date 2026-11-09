@@ -100,6 +100,9 @@ final class TrezorPay_Order {
 			$token        = bin2hex( random_bytes( 16 ) );
 			$callback     = self::callback_url( $order, $ticker, $token );
 			$created      = self::create_address( $ticker, $callback, $wallet );
+			if ( is_wp_error( $created ) && 'trezorpay_wallet_changed' === $created->get_error_code() ) {
+				TrezorPay_Logger::error( sprintf( 'TrezorPay forwards %s to another wallet than the configured one, even under a new callback URL: payment refused.', $ticker ) );
+			}
 		}
 		if ( is_wp_error( $created ) ) {
 			return 'trezorpay_wallet' === $created->get_error_code() ? $created : self::generic_error( $created );
@@ -554,13 +557,29 @@ final class TrezorPay_Order {
 			return new WP_Error( 'trezorpay_error', 'No usable address' );
 		}
 
-		$out  = isset( $created['address_out'] ) && is_string( $created['address_out'] ) ? $created['address_out'] : '';
-		$same = 'evm' === TrezorPay_Coins::family( $ticker ) ? 0 === strcasecmp( $out, $wallet ) : $out === $wallet;
-		if ( ! $same ) {
+		$out = isset( $created['address_out'] ) && is_string( $created['address_out'] ) ? $created['address_out'] : '';
+		if ( self::canonical_wallet( $ticker, $out ) !== self::canonical_wallet( $ticker, $wallet ) ) {
 			TrezorPay_Logger::debug( sprintf( 'Address for %s forwards to another wallet than the configured one: creating a new one.', $ticker ) );
 			return new WP_Error( 'trezorpay_wallet_changed', 'Wallet changed' );
 		}
 		return $created;
+	}
+
+	/**
+	 * A wallet in the form the API echoes it back: EVM hex, CashAddr (prefix optional) and bech32 are
+	 * case-insensitive; base58 addresses are compared exactly.
+	 *
+	 * @param string $ticker Ticker route.
+	 * @param string $wallet Wallet address.
+	 * @return string
+	 */
+	private static function canonical_wallet( $ticker, $wallet ) {
+		$wallet = trim( $wallet );
+		if ( 'evm' === TrezorPay_Coins::family( $ticker ) ) {
+			return strtolower( $wallet );
+		}
+		$bare = preg_replace( '/^bitcoincash:/i', '', $wallet );
+		return preg_match( '/^(bc1|ltc1|tb1|tltc1|q|p)/i', $bare ) ? strtolower( $bare ) : $bare;
 	}
 
 	/**
