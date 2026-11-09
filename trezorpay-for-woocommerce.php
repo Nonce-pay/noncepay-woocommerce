@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       TrezorPay for WooCommerce
- * Plugin URI:        https://trezorpay.com/
+ * Plugin URI:        https://github.com/Trezor-Pay/trezorpay-woocommerce
  * Description:       Accept crypto payments (USDT, USDC, BTC, ETH, SOL and more) sent straight to your own wallets. Non-custodial, no account, no API key.
  * Version:           1.0.0
  * Requires at least: 6.4
