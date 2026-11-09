@@ -1,10 +1,10 @@
-=== TrezorPay for WooCommerce ===
-Contributors: trezorpay
+=== NoncePay for WooCommerce ===
+Contributors: noncepay
 Tags: crypto, bitcoin, usdt, woocommerce, payment gateway
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,52 +12,52 @@ Accept USDT, USDC, Bitcoin, Ethereum, Solana and more in WooCommerce. Payments g
 
 == Description ==
 
-TrezorPay for WooCommerce adds a crypto payment method to your store. Customers pick a coin at checkout, see the exact amount, a QR code and a unique payment address, and the order updates by itself once the payment is confirmed on the blockchain.
+NoncePay for WooCommerce adds a crypto payment method to your store. Customers pick a coin at checkout, see the exact amount, a QR code and a unique payment address, and the order updates by itself once the payment is confirmed on the blockchain.
 
-TrezorPay is non-custodial: every payment is forwarded automatically to the wallet you entered in the settings. There is no sign-up, no API key, no monthly fee and no withdrawal step.
+NoncePay is non-custodial: every payment is forwarded automatically to the wallet you entered in the settings. There is no sign-up, no API key, no monthly fee and no withdrawal step.
 
 = Features =
 
-* Stablecoins and major coins: USDT (Tron, BNB Smart Chain, Ethereum), USDC (Base, Polygon, Arbitrum, Solana), BTC, ETH, LTC, TRX, SOL, BNB, DOGE, and every other coin TrezorPay supports.
+* Stablecoins and major coins: USDT (Tron, BNB Smart Chain, Ethereum), USDC (Base, Polygon, Arbitrum, Solana), BTC, ETH, LTC, TRX, SOL, BNB, DOGE, and every other coin NoncePay supports.
 * One wallet per coin, entered in the gateway settings. Only coins with a wallet are offered.
 * Works with the classic checkout and the Cart and Checkout blocks.
 * Compatible with High-Performance Order Storage (HPOS).
 * Payment page with amount and address copy buttons, QR code, network warning, quote countdown and a live status (waiting, payment seen, confirmed).
 * Partial payments add up: a customer may pay in several transactions. Underpayments put the order on hold, overpayments are noted on the order.
 * Configurable underpayment tolerance, quote validity and paid status (processing or completed).
-* Every callback is verified with TrezorPay's RSA signature and processed once, even when callbacks arrive at the same time.
+* Every callback is verified with NoncePay's RSA signature and processed once, even when callbacks arrive at the same time.
 * Exact decimal math for crypto amounts, never floating point.
 
 = Fees =
 
-TrezorPay deducts a 1.25% service fee (lower with volume) and the network cost from each payment before forwarding it to your wallet. The customer pays the quoted amount; you receive that amount minus the fee. See https://trezorpay.com/docs/fees/.
+NoncePay deducts a 1.25% service fee (lower with volume) and the network cost from each payment before forwarding it to your wallet. The customer pays the quoted amount; you receive that amount minus the fee. See https://noncepay.app/docs/fees/.
 
 == External services ==
 
-This plugin relies on the TrezorPay API (https://api.trezorpay.com), operated by TrezorPay, to create payment addresses, convert prices, draw QR codes and notify your store of payments. Without it the payment method cannot work.
+This plugin relies on the NoncePay API (https://api.noncepay.app), operated by NoncePay, to create payment addresses, convert prices, draw QR codes and notify your store of payments. Without it the payment method cannot work.
 
 What is sent, and when:
 
-* When a customer places an order with this payment method: the order total and your store currency (to convert the price into the chosen coin), your receiving wallet address for that coin, and a callback URL on your site that contains the order number and a random per-order secret. TrezorPay uses the callback URL to notify your store of payments. The payment address and amount are then sent back to draw the QR code.
+* When a customer places an order with this payment method: the order total and your store currency (to convert the price into the chosen coin), your receiving wallet address for that coin, and a callback URL on your site that contains the order number and a random per-order secret. NoncePay uses the callback URL to notify your store of payments. The payment address and amount are then sent back to draw the QR code.
 * When the payment page refreshes an expired quote: the order total and store currency again.
 * When the settings page or checkout is loaded and the coin list is not cached (at most once an hour): a request for the list of supported coins. No store or customer data is sent.
-* When the first payment notification arrives, and again when a signature does not match (at most once an hour, and at most once every 15 minutes after a failed attempt): a request for TrezorPay's public key, to verify notifications. No data is sent.
+* When the first payment notification arrives, and again when a signature does not match (at most once an hour, and at most once every 15 minutes after a failed attempt): a request for NoncePay's public key, to verify notifications. No data is sent.
 * When a payment is confirmed after its quote expired: the order total and store currency, to check the payment still covers the order at the current rate.
 
-No customer name, email, postal address or IP address is sent to TrezorPay by this plugin. TrezorPay sees the requests of your web server, not of your customers' browsers.
+No customer name, email, postal address or IP address is sent to NoncePay by this plugin. NoncePay sees the requests of your web server, not of your customers' browsers.
 
-TrezorPay terms of service: https://trezorpay.com/terms/
-TrezorPay privacy policy: https://trezorpay.com/privacy/
+NoncePay terms of service: https://noncepay.app/terms/
+NoncePay privacy policy: https://noncepay.app/privacy/
 
 == Installation ==
 
 1. Install and activate WooCommerce 8.0 or later.
-2. Install this plugin from Plugins > Add New, or upload the `trezorpay-for-woocommerce` folder to `/wp-content/plugins/`, then activate it.
-3. Go to WooCommerce > Settings > Payments > TrezorPay.
+2. Install this plugin from Plugins > Add New, or upload the `noncepay-for-woocommerce` folder to `/wp-content/plugins/`, then activate it.
+3. Go to WooCommerce > Settings > Payments > NoncePay.
 4. Enable the gateway and enter your receiving wallet address for each coin you want to accept. Use an address you control on that exact network.
 5. Save. The coins with a wallet are now offered at checkout.
 
-Your store currency must be one TrezorPay converts (USD, EUR, GBP, CAD, JPY, CHF, AUD and about thirty others). The settings page warns you when it is not.
+Your store currency must be one NoncePay converts (USD, EUR, GBP, CAD, JPY, CHF, AUD and about thirty others). The settings page warns you when it is not.
 
 == Frequently Asked Questions ==
 
@@ -83,23 +83,23 @@ Yes. Each transaction is credited once, and the amounts add up.
 
 = My site is behind a reverse proxy or CDN and callbacks are rejected =
 
-Callbacks are signed over the exact URL TrezorPay called. The plugin rebuilds it from the scheme, host and port of the callback URL saved on the order and the request path received. If your proxy changes the path, or you need another base, set it with a filter:
+Callbacks are signed over the exact URL NoncePay called. The plugin rebuilds it from the scheme, host and port of the callback URL saved on the order and the request path received. If your proxy changes the path, or you need another base, set it with a filter:
 
-`add_filter( 'trezorpay_callback_base_url', function () { return 'https://shop.example.com'; } );`
+`add_filter( 'noncepay_callback_base_url', function () { return 'https://shop.example.com'; } );`
 
-Callbacks are delivered to `/wp-json/trezorpay/v1/callback`. Make sure security plugins or firewalls do not block that REST route for anonymous requests.
+Callbacks are delivered to `/wp-json/noncepay/v1/callback`. Make sure security plugins or firewalls do not block that REST route for anonymous requests.
 
 = Which databases are supported? =
 
 Concurrent payment notifications for the same order are serialized with a MySQL/MariaDB named lock (`GET_LOCK`). It works on a single primary database server, which is what almost every WordPress host uses. Setups that send queries to several servers (read/write splitting across replicas, Galera multi-primary clusters, Vitess or PlanetScale) do not share named locks between servers; on those, make sure WordPress writes and these locks go to a single primary.
 
-= Can I pin TrezorPay's public key? =
+= Can I pin NoncePay's public key? =
 
-Yes. Define `TREZORPAY_PUBLIC_KEY_PEM` in `wp-config.php` with the PEM key from https://api.trezorpay.com/pubkey/. By default the key is fetched from that URL and cached.
+Yes. Define `NONCEPAY_PUBLIC_KEY_PEM` in `wp-config.php` with the PEM key from https://api.noncepay.app/pubkey/. By default the key is fetched from that URL and cached.
 
 = Where are the logs? =
 
-WooCommerce > Status > Logs, source `trezorpay-for-woocommerce`. Errors are always logged; enable "Debug log" in the settings for API calls and callbacks. Per-order secrets are never logged.
+WooCommerce > Status > Logs, source `noncepay-for-woocommerce`. Errors are always logged; enable "Debug log" in the settings for API calls and callbacks. Per-order secrets are never logged.
 
 = Can I refund from WooCommerce? =
 
@@ -114,10 +114,16 @@ No. Payments are already in your wallet: refund the customer from your wallet, t
 
 == Changelog ==
 
+= 1.1.0 =
+* TrezorPay is now NoncePay: new plugin name and slug (`noncepay-for-woocommerce`), API at https://api.noncepay.app, callback route `/wp-json/noncepay/v1/callback`, filters `noncepay_callback_base_url` and `noncepay_api_base_url`, constant `NONCEPAY_PUBLIC_KEY_PEM`.
+
 = 1.0.0 =
 * First release.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+TrezorPay is now NoncePay. This is a new plugin slug: deactivate and delete TrezorPay for WooCommerce, install this one and enter your wallets again. Finish or cancel open crypto orders first.
 
 = 1.0.0 =
 First release.

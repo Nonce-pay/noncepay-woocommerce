@@ -1,11 +1,11 @@
 #!/bin/bash
-# Sends a callback signed with the throwaway key in tests/keys, like TrezorPay would.
+# Sends a callback signed with the throwaway key in tests/keys, like NoncePay would.
 # tests/callback.sh <order_id> <pending 1|0> <uuid> <value_coin> [address_in] [token]
 # Set BAD_SIG=1 to send a wrong signature, NO_FORWARD=1 to leave out txid_out and value_forwarded_coin.
 set -e
 cd "$(dirname "$0")"
 ORDER=$1; PENDING=$2; UUID=$3; VALUE=$4
-read -r CB ADDR TICKER TOKEN <<<"$(./wp.sh eval "\$o=wc_get_order($ORDER); echo add_query_arg(['order'=>$ORDER,'ticker'=>str_replace('/','_',\$o->get_meta('_trezorpay_ticker')),'token'=>\$o->get_meta('_trezorpay_token')], rest_url('trezorpay/v1/callback')),' ',\$o->get_meta('_trezorpay_address'),' ',str_replace('/','_',\$o->get_meta('_trezorpay_ticker')),' ',\$o->get_meta('_trezorpay_token');")"
+read -r CB ADDR TICKER TOKEN <<<"$(./wp.sh eval "\$o=wc_get_order($ORDER); echo add_query_arg(['order'=>$ORDER,'ticker'=>str_replace('/','_',\$o->get_meta('_noncepay_ticker')),'token'=>\$o->get_meta('_noncepay_token')], rest_url('noncepay/v1/callback')),' ',\$o->get_meta('_noncepay_address'),' ',str_replace('/','_',\$o->get_meta('_noncepay_ticker')),' ',\$o->get_meta('_noncepay_token');")"
 ADDR=${5:-$ADDR}
 if [ -n "$6" ]; then CB=${CB/token=$TOKEN/token=$6}; fi
 TXIN=in$(echo -n "$UUID" | md5 | cut -c1-20)

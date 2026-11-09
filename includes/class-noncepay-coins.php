@@ -2,7 +2,7 @@
 /**
  * Supported coins, read from the API's /info/ route.
  *
- * @package TrezorPay
+ * @package NoncePay
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,11 +10,11 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Coin catalogue.
  */
-final class TrezorPay_Coins {
+final class NoncePay_Coins {
 
-	const TRANSIENT = 'trezorpay_info';
+	const TRANSIENT = 'noncepay_info';
 
-	const FALLBACK_OPTION = 'trezorpay_info_cache';
+	const FALLBACK_OPTION = 'noncepay_info_cache';
 
 	const POPULAR = array(
 		'trc20/usdt',
@@ -92,7 +92,7 @@ final class TrezorPay_Coins {
 	 */
 	public static function label( $coin ) {
 		/* translators: 1: coin symbol, 2: network name */
-		return sprintf( __( '%1$s (%2$s)', 'trezorpay-for-woocommerce' ), $coin['symbol'], $coin['network_label'] );
+		return sprintf( __( '%1$s (%2$s)', 'noncepay-for-woocommerce' ), $coin['symbol'], $coin['network_label'] );
 	}
 
 	/**
@@ -141,7 +141,7 @@ final class TrezorPay_Coins {
 	 * @return array
 	 */
 	private static function fetch() {
-		$info = TrezorPay_API::info();
+		$info = NoncePay_API::info();
 		if ( is_wp_error( $info ) ) {
 			set_transient( self::TRANSIENT, array(), 5 * MINUTE_IN_SECONDS );
 			return array();
@@ -180,7 +180,7 @@ final class TrezorPay_Coins {
 	 * @return array
 	 */
 	private static function coin( $ticker, $network, $symbol, $data ) {
-		$minimum = TrezorPay_Decimal::parse( isset( $data['minimum_transaction_coin'] ) ? $data['minimum_transaction_coin'] : null );
+		$minimum = NoncePay_Decimal::parse( isset( $data['minimum_transaction_coin'] ) ? $data['minimum_transaction_coin'] : null );
 		return array(
 			'ticker'        => $ticker,
 			'symbol'        => sanitize_text_field( $symbol ),
@@ -232,21 +232,21 @@ final class TrezorPay_Coins {
 	 */
 	private static function network_label( $network ) {
 		$labels = array(
-			'btc'      => __( 'Bitcoin', 'trezorpay-for-woocommerce' ),
-			'eth'      => __( 'Ethereum', 'trezorpay-for-woocommerce' ),
-			'erc20'    => __( 'Ethereum ERC-20', 'trezorpay-for-woocommerce' ),
-			'bep20'    => __( 'BNB Smart Chain BEP-20', 'trezorpay-for-woocommerce' ),
-			'trx'      => __( 'Tron', 'trezorpay-for-woocommerce' ),
-			'trc20'    => __( 'Tron TRC-20', 'trezorpay-for-woocommerce' ),
-			'polygon'  => __( 'Polygon', 'trezorpay-for-woocommerce' ),
-			'base'     => __( 'Base', 'trezorpay-for-woocommerce' ),
-			'arbitrum' => __( 'Arbitrum One', 'trezorpay-for-woocommerce' ),
-			'optimism' => __( 'Optimism', 'trezorpay-for-woocommerce' ),
-			'avax-c'   => __( 'Avalanche C-Chain', 'trezorpay-for-woocommerce' ),
-			'sol'      => __( 'Solana', 'trezorpay-for-woocommerce' ),
-			'ltc'      => __( 'Litecoin', 'trezorpay-for-woocommerce' ),
-			'bch'      => __( 'Bitcoin Cash', 'trezorpay-for-woocommerce' ),
-			'doge'     => __( 'Dogecoin', 'trezorpay-for-woocommerce' ),
+			'btc'      => __( 'Bitcoin', 'noncepay-for-woocommerce' ),
+			'eth'      => __( 'Ethereum', 'noncepay-for-woocommerce' ),
+			'erc20'    => __( 'Ethereum ERC-20', 'noncepay-for-woocommerce' ),
+			'bep20'    => __( 'BNB Smart Chain BEP-20', 'noncepay-for-woocommerce' ),
+			'trx'      => __( 'Tron', 'noncepay-for-woocommerce' ),
+			'trc20'    => __( 'Tron TRC-20', 'noncepay-for-woocommerce' ),
+			'polygon'  => __( 'Polygon', 'noncepay-for-woocommerce' ),
+			'base'     => __( 'Base', 'noncepay-for-woocommerce' ),
+			'arbitrum' => __( 'Arbitrum One', 'noncepay-for-woocommerce' ),
+			'optimism' => __( 'Optimism', 'noncepay-for-woocommerce' ),
+			'avax-c'   => __( 'Avalanche C-Chain', 'noncepay-for-woocommerce' ),
+			'sol'      => __( 'Solana', 'noncepay-for-woocommerce' ),
+			'ltc'      => __( 'Litecoin', 'noncepay-for-woocommerce' ),
+			'bch'      => __( 'Bitcoin Cash', 'noncepay-for-woocommerce' ),
+			'doge'     => __( 'Dogecoin', 'noncepay-for-woocommerce' ),
 		);
 		return isset( $labels[ $network ] ) ? $labels[ $network ] : ucfirst( $network );
 	}

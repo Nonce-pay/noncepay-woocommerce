@@ -1,8 +1,8 @@
-/* TrezorPay payment page: copy buttons, quote countdown and live status. */
+/* NoncePay payment page: copy buttons, quote countdown and live status. */
 ;(function () {
   'use strict'
 
-  var root = document.getElementById('trezorpay-payment')
+  var root = document.getElementById('noncepay-payment')
   if (!root) {
     return
   }
@@ -19,16 +19,16 @@
   var clockOffset = Date.now() / 1000 - (config.now || Date.now() / 1000)
 
   var STATUS = {
-    waiting: __('Waiting for your payment', 'trezorpay-for-woocommerce'),
-    seen: __('Payment seen, waiting for confirmations', 'trezorpay-for-woocommerce'),
-    partial: __('Partial payment received', 'trezorpay-for-woocommerce'),
-    paid: __('Payment confirmed. Thank you!', 'trezorpay-for-woocommerce'),
-    expired: __('This quote has expired', 'trezorpay-for-woocommerce'),
-    cancelled: __('This order is cancelled', 'trezorpay-for-woocommerce'),
+    waiting: __('Waiting for your payment', 'noncepay-for-woocommerce'),
+    seen: __('Payment seen, waiting for confirmations', 'noncepay-for-woocommerce'),
+    partial: __('Partial payment received', 'noncepay-for-woocommerce'),
+    paid: __('Payment confirmed. Thank you!', 'noncepay-for-woocommerce'),
+    expired: __('This quote has expired', 'noncepay-for-woocommerce'),
+    cancelled: __('This order is cancelled', 'noncepay-for-woocommerce'),
   }
 
   function el(name) {
-    return root.querySelector('[data-trezorpay="' + name + '"]')
+    return root.querySelector('[data-noncepay="' + name + '"]')
   }
 
   function render() {
@@ -36,8 +36,8 @@
     el('status').textContent = STATUS[data.state] || ''
     var partial = 'partial' === data.state
     el('amount-label').textContent = partial
-      ? __('Amount still to send', 'trezorpay-for-woocommerce')
-      : __('Amount to send', 'trezorpay-for-woocommerce')
+      ? __('Amount still to send', 'noncepay-for-woocommerce')
+      : __('Amount to send', 'noncepay-for-woocommerce')
     el('amount').textContent = data.to_send || (partial ? data.remaining : data.amount)
     var note = el('minimum-note')
     note.hidden = !data.below_minimum
@@ -46,7 +46,7 @@
         /* translators: 1: amount still missing, 2: minimum payment, 3: coin symbol */
         __(
           'Only %1$s %3$s is missing, but payments below %2$s %3$s cannot be processed. Send at least %2$s %3$s: the extra is noted on your order.',
-          'trezorpay-for-woocommerce'
+          'noncepay-for-woocommerce'
         ),
         data.remaining,
         data.minimum,
@@ -69,7 +69,7 @@
         'expired' === data.state
           ? __(
               'The exchange rate is no longer guaranteed. Get a new quote before paying.',
-              'trezorpay-for-woocommerce'
+              'noncepay-for-woocommerce'
             )
           : ''
       return
@@ -83,7 +83,7 @@
     var minutes = Math.floor(left / 60)
     var seconds = left % 60
     /* translators: %s: remaining time as mm:ss */
-    timer.textContent = __('Rate guaranteed for %s', 'trezorpay-for-woocommerce').replace(
+    timer.textContent = __('Rate guaranteed for %s', 'noncepay-for-woocommerce').replace(
       '%s',
       minutes + ':' + (seconds < 10 ? '0' : '') + seconds
     )
@@ -125,7 +125,7 @@
     var text = el(button.getAttribute('data-copy')).textContent.trim()
     var done = function () {
       var label = button.textContent
-      button.textContent = __('Copied', 'trezorpay-for-woocommerce')
+      button.textContent = __('Copied', 'noncepay-for-woocommerce')
       window.setTimeout(function () {
         button.textContent = label
       }, 1500)
@@ -177,7 +177,7 @@
     }
     if (button.hasAttribute('data-copy')) {
       copy(button)
-    } else if ('requote' === button.getAttribute('data-trezorpay')) {
+    } else if ('requote' === button.getAttribute('data-noncepay')) {
       requote(button)
     }
   })

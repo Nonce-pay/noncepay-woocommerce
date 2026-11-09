@@ -1,8 +1,8 @@
 <?php
 /**
- * TrezorPay data stored on a WooCommerce order, quoting and callback bookkeeping.
+ * NoncePay data stored on a WooCommerce order, quoting and callback bookkeeping.
  *
- * @package TrezorPay
+ * @package NoncePay
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,36 +10,36 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Order helper.
  */
-final class TrezorPay_Order {
+final class NoncePay_Order {
 
-	const TICKER        = '_trezorpay_ticker';
-	const ADDRESS       = '_trezorpay_address';
-	const AMOUNT        = '_trezorpay_amount';
-	const MINIMUM       = '_trezorpay_minimum';
-	const QUOTED_AT     = '_trezorpay_quoted_at';
-	const EXPIRES_AT    = '_trezorpay_expires_at';
-	const TOKEN         = '_trezorpay_token';
-	const RECEIVED      = '_trezorpay_received';
-	const CONFIRMED     = '_trezorpay_confirmed_uuids';
-	const SEEN          = '_trezorpay_seen_uuids';
-	const SEEN_AT       = '_trezorpay_seen_at';
-	const PREVIOUS      = '_trezorpay_previous_addresses';
-	const OLD_TOKENS    = '_trezorpay_old_tokens';
-	const QR            = '_trezorpay_qr';
-	const LABEL         = '_trezorpay_label';
-	const SYMBOL        = '_trezorpay_symbol';
-	const NETWORK       = '_trezorpay_network_label';
-	const BASE_URL      = '_trezorpay_callback_base';
-	const CANCELLED     = '_trezorpay_was_cancelled';
+	const TICKER        = '_noncepay_ticker';
+	const ADDRESS       = '_noncepay_address';
+	const AMOUNT        = '_noncepay_amount';
+	const MINIMUM       = '_noncepay_minimum';
+	const QUOTED_AT     = '_noncepay_quoted_at';
+	const EXPIRES_AT    = '_noncepay_expires_at';
+	const TOKEN         = '_noncepay_token';
+	const RECEIVED      = '_noncepay_received';
+	const CONFIRMED     = '_noncepay_confirmed_uuids';
+	const SEEN          = '_noncepay_seen_uuids';
+	const SEEN_AT       = '_noncepay_seen_at';
+	const PREVIOUS      = '_noncepay_previous_addresses';
+	const OLD_TOKENS    = '_noncepay_old_tokens';
+	const QR            = '_noncepay_qr';
+	const LABEL         = '_noncepay_label';
+	const SYMBOL        = '_noncepay_symbol';
+	const NETWORK       = '_noncepay_network_label';
+	const BASE_URL      = '_noncepay_callback_base';
+	const CANCELLED     = '_noncepay_was_cancelled';
 
 	/**
-	 * Whether the order is paid with TrezorPay and has a payment address.
+	 * Whether the order is paid with NoncePay and has a payment address.
 	 *
 	 * @param WC_Order|false|null $order Order.
 	 * @return bool
 	 */
 	public static function is_ours( $order ) {
-		return $order instanceof WC_Order && 'trezorpay' === $order->get_payment_method() && '' !== (string) $order->get_meta( self::ADDRESS );
+		return $order instanceof WC_Order && 'noncepay' === $order->get_payment_method() && '' !== (string) $order->get_meta( self::ADDRESS );
 	}
 
 	/**
@@ -76,9 +76,9 @@ final class TrezorPay_Order {
 	 * @return true|WP_Error Error messages are safe to show the customer.
 	 */
 	public static function start( $order, $ticker, $wallet, $minutes ) {
-		$coin = TrezorPay_Coins::get( $ticker );
+		$coin = NoncePay_Coins::get( $ticker );
 		if ( ! $coin ) {
-			return new WP_Error( 'trezorpay_coin', __( 'Please choose a supported cryptocurrency.', 'trezorpay-for-woocommerce' ) );
+			return new WP_Error( 'noncepay_coin', __( 'Please choose a supported cryptocurrency.', 'noncepay-for-woocommerce' ) );
 		}
 
 		$amount = self::convert( $order, $coin );
@@ -94,30 +94,30 @@ final class TrezorPay_Order {
 
 		$callback = self::callback_url( $order, $ticker, $token );
 		$created  = self::create_address( $ticker, $callback, $wallet );
-		if ( is_wp_error( $created ) && 'trezorpay_wallet_changed' === $created->get_error_code() ) {
+		if ( is_wp_error( $created ) && 'noncepay_wallet_changed' === $created->get_error_code() ) {
 			// The API keeps the first destination of a callback URL forever: a new wallet needs a new callback URL.
 			$old_tokens[] = $token;
 			$token        = bin2hex( random_bytes( 16 ) );
 			$callback     = self::callback_url( $order, $ticker, $token );
 			$created      = self::create_address( $ticker, $callback, $wallet );
-			if ( is_wp_error( $created ) && 'trezorpay_wallet_changed' === $created->get_error_code() ) {
-				TrezorPay_Logger::error( sprintf( 'TrezorPay forwards %s to another wallet than the configured one, even under a new callback URL: payment refused.', $ticker ) );
+			if ( is_wp_error( $created ) && 'noncepay_wallet_changed' === $created->get_error_code() ) {
+				NoncePay_Logger::error( sprintf( 'NoncePay forwards %s to another wallet than the configured one, even under a new callback URL: payment refused.', $ticker ) );
 			}
 		}
 		if ( is_wp_error( $created ) ) {
-			return 'trezorpay_wallet' === $created->get_error_code() ? $created : self::generic_error( $created );
+			return 'noncepay_wallet' === $created->get_error_code() ? $created : self::generic_error( $created );
 		}
 		$address = $created['address_in'];
 
-		$minimum = TrezorPay_Decimal::parse( isset( $created['minimum_transaction_coin'] ) ? $created['minimum_transaction_coin'] : null );
+		$minimum = NoncePay_Decimal::parse( isset( $created['minimum_transaction_coin'] ) ? $created['minimum_transaction_coin'] : null );
 		if ( null === $minimum && '' !== $coin['minimum'] ) {
 			$minimum = $coin['minimum'];
 		}
 		if ( null === $minimum ) {
-			TrezorPay_Logger::error( sprintf( 'Unknown minimum for %s: payment refused.', $ticker ) );
+			NoncePay_Logger::error( sprintf( 'Unknown minimum for %s: payment refused.', $ticker ) );
 			return self::generic_error();
 		}
-		if ( TrezorPay_Decimal::cmp( $amount, $minimum ) < 0 ) {
+		if ( NoncePay_Decimal::cmp( $amount, $minimum ) < 0 ) {
 			return self::below_minimum_error( $coin, $minimum );
 		}
 
@@ -133,7 +133,7 @@ final class TrezorPay_Order {
 		$order->update_meta_data( self::MINIMUM, $minimum );
 		$order->update_meta_data( self::TOKEN, $token );
 		$order->update_meta_data( self::OLD_TOKENS, array_values( array_unique( $old_tokens ) ) );
-		$order->update_meta_data( self::LABEL, TrezorPay_Coins::label( $coin ) );
+		$order->update_meta_data( self::LABEL, NoncePay_Coins::label( $coin ) );
 		$order->update_meta_data( self::SYMBOL, $coin['symbol'] );
 		$order->update_meta_data( self::NETWORK, $coin['network_label'] );
 		$order->update_meta_data( self::BASE_URL, self::url_base( $callback ) );
@@ -143,7 +143,7 @@ final class TrezorPay_Order {
 		self::store_quote( $order, $ticker, $address, $amount, $minutes );
 
 		/* translators: 1: amount, 2: coin label, 3: payment address */
-		$order->add_order_note( sprintf( __( 'TrezorPay: awaiting %1$s %2$s on %3$s.', 'trezorpay-for-woocommerce' ), $amount, TrezorPay_Coins::label( $coin ), $address ) );
+		$order->add_order_note( sprintf( __( 'NoncePay: awaiting %1$s %2$s on %3$s.', 'noncepay-for-woocommerce' ), $amount, NoncePay_Coins::label( $coin ), $address ) );
 		return true;
 	}
 
@@ -156,7 +156,7 @@ final class TrezorPay_Order {
 	 */
 	public static function requote( $order, $minutes ) {
 		$ticker = (string) $order->get_meta( self::TICKER );
-		$coin   = TrezorPay_Coins::get( $ticker );
+		$coin   = NoncePay_Coins::get( $ticker );
 		if ( ! $coin ) {
 			return self::generic_error();
 		}
@@ -165,12 +165,12 @@ final class TrezorPay_Order {
 			return $amount;
 		}
 		$minimum = (string) $order->get_meta( self::MINIMUM );
-		if ( '' !== $minimum && TrezorPay_Decimal::cmp( $amount, $minimum ) < 0 ) {
+		if ( '' !== $minimum && NoncePay_Decimal::cmp( $amount, $minimum ) < 0 ) {
 			return self::below_minimum_error( $coin, $minimum );
 		}
 		self::store_quote( $order, $ticker, (string) $order->get_meta( self::ADDRESS ), $amount, $minutes );
 		/* translators: 1: amount, 2: coin label */
-		$order->add_order_note( sprintf( __( 'TrezorPay: quote refreshed to %1$s %2$s.', 'trezorpay-for-woocommerce' ), $amount, self::label( $order ) ) );
+		$order->add_order_note( sprintf( __( 'NoncePay: quote refreshed to %1$s %2$s.', 'noncepay-for-woocommerce' ), $amount, self::label( $order ) ) );
 		return true;
 	}
 
@@ -193,7 +193,7 @@ final class TrezorPay_Order {
 		$coin    = $field( 'coin', '/^[a-z0-9_.-]{1,40}$/' );
 
 		if ( '' === $uuid || '' === $pending ) {
-			TrezorPay_Logger::error( sprintf( 'Order %d: callback without uuid or pending flag ignored.', $order->get_id() ) );
+			NoncePay_Logger::error( sprintf( 'Order %d: callback without uuid or pending flag ignored.', $order->get_id() ) );
 			return;
 		}
 
@@ -204,17 +204,17 @@ final class TrezorPay_Order {
 			if ( isset( $previous[ $address ] ) ) {
 				self::apply_previous_address_payment( $order, $uuid, $address, $params, $pending );
 			} else {
-				TrezorPay_Logger::debug( sprintf( 'Order %d: callback for an unknown address ignored.', $order->get_id() ) );
+				NoncePay_Logger::debug( sprintf( 'Order %d: callback for an unknown address ignored.', $order->get_id() ) );
 			}
 			return;
 		}
 
-		if ( TrezorPay_Coins::callback_coin( $ticker ) !== $coin ) {
-			TrezorPay_Logger::error( sprintf( 'Order %d: callback for coin %s on a %s address ignored.', $order->get_id(), $coin, $ticker ) );
+		if ( NoncePay_Coins::callback_coin( $ticker ) !== $coin ) {
+			NoncePay_Logger::error( sprintf( 'Order %d: callback for coin %s on a %s address ignored.', $order->get_id(), $coin, $ticker ) );
 			return;
 		}
 
-		$value   = TrezorPay_Decimal::parse( isset( $params['value_coin'] ) ? $params['value_coin'] : null );
+		$value   = NoncePay_Decimal::parse( isset( $params['value_coin'] ) ? $params['value_coin'] : null );
 		$label   = self::label( $order );
 		$seen    = self::list_meta( $order, self::SEEN );
 		$done    = self::list_meta( $order, self::CONFIRMED );
@@ -237,7 +237,7 @@ final class TrezorPay_Order {
 			$order->save();
 			$note = sprintf(
 				/* translators: 1: amount, 2: coin label, 3: transaction id */
-				__( 'TrezorPay: payment of %1$s %2$s seen on chain (txid_in %3$s), waiting for confirmations.', 'trezorpay-for-woocommerce' ),
+				__( 'NoncePay: payment of %1$s %2$s seen on chain (txid_in %3$s), waiting for confirmations.', 'noncepay-for-woocommerce' ),
 				null === $value ? '?' : $value,
 				$label,
 				$txid_in
@@ -251,26 +251,26 @@ final class TrezorPay_Order {
 		}
 
 		if ( in_array( $uuid, $done, true ) ) {
-			TrezorPay_Logger::debug( sprintf( 'Order %d: duplicate confirmed callback ignored.', $order->get_id() ) );
+			NoncePay_Logger::debug( sprintf( 'Order %d: duplicate confirmed callback ignored.', $order->get_id() ) );
 			return;
 		}
 
 		if ( null === $value ) {
-			TrezorPay_Logger::error( sprintf( 'Order %d: confirmed callback with an unreadable amount, not credited.', $order->get_id() ) );
-			$order->add_order_note( __( 'TrezorPay: a confirmed payment arrived with an unreadable amount and was not credited. Check your wallet and review the order manually.', 'trezorpay-for-woocommerce' ) );
+			NoncePay_Logger::error( sprintf( 'Order %d: confirmed callback with an unreadable amount, not credited.', $order->get_id() ) );
+			$order->add_order_note( __( 'NoncePay: a confirmed payment arrived with an unreadable amount and was not credited. Check your wallet and review the order manually.', 'noncepay-for-woocommerce' ) );
 			return;
 		}
 
 		$txid_out  = $field( 'txid_out', '/^[A-Za-z0-9]{1,128}$/' );
-		$forwarded = TrezorPay_Decimal::parse( isset( $params['value_forwarded_coin'] ) ? $params['value_forwarded_coin'] : null );
+		$forwarded = NoncePay_Decimal::parse( isset( $params['value_forwarded_coin'] ) ? $params['value_forwarded_coin'] : null );
 		if ( '' === $txid_out || null === $forwarded ) {
-			TrezorPay_Logger::error( sprintf( 'Order %d: confirmed callback without a forwarding transaction, not credited.', $order->get_id() ) );
+			NoncePay_Logger::error( sprintf( 'Order %d: confirmed callback without a forwarding transaction, not credited.', $order->get_id() ) );
 			$order->save();
 			/* translators: 1: amount, 2: coin label, 3: transaction id */
-			$order->add_order_note( sprintf( __( 'TrezorPay: a confirmed payment of %1$s %2$s (txid_in %3$s) arrived without a forwarding transaction and was not credited. Check your wallet and review the order manually.', 'trezorpay-for-woocommerce' ), $value, $label, $txid_in ) );
+			$order->add_order_note( sprintf( __( 'NoncePay: a confirmed payment of %1$s %2$s (txid_in %3$s) arrived without a forwarding transaction and was not credited. Check your wallet and review the order manually.', 'noncepay-for-woocommerce' ), $value, $label, $txid_in ) );
 			return;
 		}
-		$received  = TrezorPay_Decimal::add( self::received( $order ), $value );
+		$received  = NoncePay_Decimal::add( self::received( $order ), $value );
 		$expected  = (string) $order->get_meta( self::AMOUNT );
 
 		$done[] = $uuid;
@@ -285,7 +285,7 @@ final class TrezorPay_Order {
 		$order->add_order_note(
 			sprintf(
 				/* translators: 1: amount, 2: coin label, 3: txid_in, 4: amount forwarded, 5: txid_out, 6: total received, 7: total expected */
-				__( 'TrezorPay: payment of %1$s %2$s confirmed (txid_in %3$s). %4$s forwarded to your wallet (txid_out %5$s). Received so far: %6$s of %7$s.', 'trezorpay-for-woocommerce' ),
+				__( 'NoncePay: payment of %1$s %2$s confirmed (txid_in %3$s). %4$s forwarded to your wallet (txid_out %5$s). Received so far: %6$s of %7$s.', 'noncepay-for-woocommerce' ),
 				$value,
 				$label,
 				$txid_in,
@@ -314,17 +314,17 @@ final class TrezorPay_Order {
 		$label = self::label( $order );
 
 		if ( $order->is_paid() || $order->has_status( array( 'refunded' ) ) ) {
-			$order->add_order_note( __( 'TrezorPay: an extra payment arrived on an order that is already paid. Refund the customer from your wallet if needed.', 'trezorpay-for-woocommerce' ) );
+			$order->add_order_note( __( 'NoncePay: an extra payment arrived on an order that is already paid. Refund the customer from your wallet if needed.', 'noncepay-for-woocommerce' ) );
 			return;
 		}
 
-		if ( null === TrezorPay_Decimal::parse( $expected ) ) {
-			$order->update_status( 'on-hold', __( 'TrezorPay: the quoted amount is missing, review the order manually.', 'trezorpay-for-woocommerce' ) );
+		if ( null === NoncePay_Decimal::parse( $expected ) ) {
+			$order->update_status( 'on-hold', __( 'NoncePay: the quoted amount is missing, review the order manually.', 'noncepay-for-woocommerce' ) );
 			return;
 		}
 
-		$tolerance = TrezorPay_Decimal::parse( isset( $settings['tolerance'] ) ? (string) $settings['tolerance'] : '' );
-		if ( null === $tolerance || TrezorPay_Decimal::cmp( $tolerance, '100' ) >= 0 ) {
+		$tolerance = NoncePay_Decimal::parse( isset( $settings['tolerance'] ) ? (string) $settings['tolerance'] : '' );
+		if ( null === $tolerance || NoncePay_Decimal::cmp( $tolerance, '100' ) >= 0 ) {
 			$tolerance = '0';
 		}
 
@@ -336,13 +336,13 @@ final class TrezorPay_Order {
 			}
 		}
 
-		if ( TrezorPay_Decimal::covers( $received, $expected, $tolerance ) ) {
-			if ( TrezorPay_Decimal::cmp( $received, $expected ) > 0 ) {
+		if ( NoncePay_Decimal::covers( $received, $expected, $tolerance ) ) {
+			if ( NoncePay_Decimal::cmp( $received, $expected ) > 0 ) {
 				/* translators: 1: amount over, 2: coin label */
-				$order->add_order_note( sprintf( __( 'TrezorPay: overpaid by %1$s %2$s.', 'trezorpay-for-woocommerce' ), TrezorPay_Decimal::sub_floor( $received, $expected ), $label ) );
+				$order->add_order_note( sprintf( __( 'NoncePay: overpaid by %1$s %2$s.', 'noncepay-for-woocommerce' ), NoncePay_Decimal::sub_floor( $received, $expected ), $label ) );
 			}
 			if ( 'yes' === $order->get_meta( self::CANCELLED ) ) {
-				self::hold( $order, __( 'TrezorPay: the quoted amount was received, but the order had been cancelled before the payment arrived. Review it manually: restore the order or refund the customer from your wallet.', 'trezorpay-for-woocommerce' ) );
+				self::hold( $order, __( 'NoncePay: the quoted amount was received, but the order had been cancelled before the payment arrived. Review it manually: restore the order or refund the customer from your wallet.', 'noncepay-for-woocommerce' ) );
 				return;
 			}
 			if ( $late ) {
@@ -354,27 +354,27 @@ final class TrezorPay_Order {
 					)
 				);
 				if ( is_wp_error( $now ) ) {
-					self::hold( $order, __( 'TrezorPay: part of the payment was sent after the quote expired and the current rate could not be checked. Review it manually.', 'trezorpay-for-woocommerce' ) );
+					self::hold( $order, __( 'NoncePay: part of the payment was sent after the quote expired and the current rate could not be checked. Review it manually.', 'noncepay-for-woocommerce' ) );
 					return;
 				}
-				if ( ! TrezorPay_Decimal::covers( $received, $now, $tolerance ) ) {
+				if ( ! NoncePay_Decimal::covers( $received, $now, $tolerance ) ) {
 					/* translators: 1: amount received, 2: coin label, 3: amount the order total is worth now */
-					self::hold( $order, sprintf( __( 'TrezorPay: part of the payment was sent after the quote expired and is now worth less than the order total (%1$s %2$s received, %3$s needed at the current rate). Review it manually.', 'trezorpay-for-woocommerce' ), $received, $label, $now ) );
+					self::hold( $order, sprintf( __( 'NoncePay: part of the payment was sent after the quote expired and is now worth less than the order total (%1$s %2$s received, %3$s needed at the current rate). Review it manually.', 'noncepay-for-woocommerce' ), $received, $label, $now ) );
 					return;
 				}
-				$order->add_order_note( __( 'TrezorPay: part of the payment was sent after the quote expired. It still covers the order total at the current rate, so the order is marked paid.', 'trezorpay-for-woocommerce' ) );
+				$order->add_order_note( __( 'NoncePay: part of the payment was sent after the quote expired. It still covers the order total at the current rate, so the order is marked paid.', 'noncepay-for-woocommerce' ) );
 			}
 			$order->payment_complete( $txid_in );
 			return;
 		}
 
-		$missing = TrezorPay_Decimal::sub_floor( $expected, $received );
+		$missing = NoncePay_Decimal::sub_floor( $expected, $received );
 		if ( $late ) {
 			/* translators: 1: amount received, 2: amount expected, 3: coin label, 4: amount missing */
-			$note = sprintf( __( 'TrezorPay: payment received after the quote expired and below the quoted amount (%1$s of %2$s %3$s, %4$s missing). Review it manually.', 'trezorpay-for-woocommerce' ), $received, $expected, $label, $missing );
+			$note = sprintf( __( 'NoncePay: payment received after the quote expired and below the quoted amount (%1$s of %2$s %3$s, %4$s missing). Review it manually.', 'noncepay-for-woocommerce' ), $received, $expected, $label, $missing );
 		} else {
 			/* translators: 1: amount received, 2: amount expected, 3: coin label, 4: amount missing */
-			$note = sprintf( __( 'TrezorPay: underpaid, %1$s of %2$s %3$s received (%4$s missing). The order stays on hold until the rest arrives.', 'trezorpay-for-woocommerce' ), $received, $expected, $label, $missing );
+			$note = sprintf( __( 'NoncePay: underpaid, %1$s of %2$s %3$s received (%4$s missing). The order stays on hold until the rest arrives.', 'noncepay-for-woocommerce' ), $received, $expected, $label, $missing );
 		}
 		self::hold( $order, $note );
 	}
@@ -413,10 +413,10 @@ final class TrezorPay_Order {
 		$order->save();
 
 		$previous = self::list_meta( $order, self::PREVIOUS );
-		$value    = TrezorPay_Decimal::parse( isset( $params['value_coin'] ) ? $params['value_coin'] : null );
+		$value    = NoncePay_Decimal::parse( isset( $params['value_coin'] ) ? $params['value_coin'] : null );
 		$note     = sprintf(
 			/* translators: 1: amount, 2: coin label, 3: address */
-			__( 'TrezorPay: a payment of %1$s %2$s arrived on %3$s, an address quoted earlier for this order. It is not credited automatically: review it manually.', 'trezorpay-for-woocommerce' ),
+			__( 'NoncePay: a payment of %1$s %2$s arrived on %3$s, an address quoted earlier for this order. It is not credited automatically: review it manually.', 'noncepay-for-woocommerce' ),
 			null === $value ? '?' : $value,
 			is_string( $previous[ $address ] ) ? $previous[ $address ] : '',
 			$address
@@ -444,7 +444,7 @@ final class TrezorPay_Order {
 			$state = 'paid';
 		} elseif ( array_diff( $seen, $done ) ) {
 			$state = 'seen';
-		} elseif ( TrezorPay_Decimal::cmp( $received, '0' ) > 0 ) {
+		} elseif ( NoncePay_Decimal::cmp( $received, '0' ) > 0 ) {
 			$state = 'partial';
 		} elseif ( $order->has_status( array( 'cancelled', 'failed', 'refunded' ) ) ) {
 			$state = 'cancelled';
@@ -454,12 +454,12 @@ final class TrezorPay_Order {
 			$state = 'waiting';
 		}
 
-		$remaining = null === TrezorPay_Decimal::parse( $expected ) ? '' : TrezorPay_Decimal::sub_floor( $expected, $received );
-		$minimum   = TrezorPay_Decimal::parse( (string) $order->get_meta( self::MINIMUM ) );
+		$remaining = null === NoncePay_Decimal::parse( $expected ) ? '' : NoncePay_Decimal::sub_floor( $expected, $received );
+		$minimum   = NoncePay_Decimal::parse( (string) $order->get_meta( self::MINIMUM ) );
 		$to_send   = 'partial' === $state ? $remaining : $expected;
-		$below     = 'partial' === $state && null !== $minimum && '' !== $remaining && TrezorPay_Decimal::cmp( $remaining, '0' ) > 0 && TrezorPay_Decimal::cmp( $remaining, $minimum ) < 0;
+		$below     = 'partial' === $state && null !== $minimum && '' !== $remaining && NoncePay_Decimal::cmp( $remaining, '0' ) > 0 && NoncePay_Decimal::cmp( $remaining, $minimum ) < 0;
 		if ( $below ) {
-			// TrezorPay ignores payments below the coin minimum: a smaller top-up would never reach the merchant.
+			// NoncePay ignores payments below the coin minimum: a smaller top-up would never reach the merchant.
 			$to_send = $minimum;
 		}
 
@@ -482,7 +482,7 @@ final class TrezorPay_Order {
 	 * @return string
 	 */
 	public static function received( $order ) {
-		$received = TrezorPay_Decimal::parse( (string) $order->get_meta( self::RECEIVED ) );
+		$received = NoncePay_Decimal::parse( (string) $order->get_meta( self::RECEIVED ) );
 		return null === $received ? '0' : $received;
 	}
 
@@ -516,7 +516,7 @@ final class TrezorPay_Order {
 	}
 
 	/**
-	 * Scheme, host and port of a URL as TrezorPay normalizes it when calling back (lowercase host, no default port).
+	 * Scheme, host and port of a URL as NoncePay normalizes it when calling back (lowercase host, no default port).
 	 *
 	 * @param string $url URL.
 	 * @return string
@@ -539,28 +539,28 @@ final class TrezorPay_Order {
 	 * @param string $ticker   Ticker route.
 	 * @param string $callback Callback URL.
 	 * @param string $wallet   Merchant wallet.
-	 * @return array|WP_Error The create response; error code trezorpay_wallet_changed when it forwards elsewhere.
+	 * @return array|WP_Error The create response; error code noncepay_wallet_changed when it forwards elsewhere.
 	 */
 	private static function create_address( $ticker, $callback, $wallet ) {
-		$created = TrezorPay_API::create( $ticker, $callback, $wallet );
+		$created = NoncePay_API::create( $ticker, $callback, $wallet );
 		if ( is_wp_error( $created ) ) {
 			if ( 'You must provide a valid address' === $created->get_error_message() ) {
-				TrezorPay_Logger::error( sprintf( 'The wallet configured for %s was rejected by TrezorPay. Fix it in WooCommerce > Settings > Payments > TrezorPay.', $ticker ) );
-				return new WP_Error( 'trezorpay_wallet', __( 'This cryptocurrency is temporarily unavailable. Please choose another one.', 'trezorpay-for-woocommerce' ) );
+				NoncePay_Logger::error( sprintf( 'The wallet configured for %s was rejected by NoncePay. Fix it in WooCommerce > Settings > Payments > NoncePay.', $ticker ) );
+				return new WP_Error( 'noncepay_wallet', __( 'This cryptocurrency is temporarily unavailable. Please choose another one.', 'noncepay-for-woocommerce' ) );
 			}
 			return $created;
 		}
 
 		$address = isset( $created['address_in'] ) && is_string( $created['address_in'] ) ? $created['address_in'] : '';
 		if ( ! preg_match( '/^[A-Za-z0-9:]{20,128}$/', $address ) ) {
-			TrezorPay_Logger::error( sprintf( 'TrezorPay returned no usable address for %s.', $ticker ) );
-			return new WP_Error( 'trezorpay_error', 'No usable address' );
+			NoncePay_Logger::error( sprintf( 'NoncePay returned no usable address for %s.', $ticker ) );
+			return new WP_Error( 'noncepay_error', 'No usable address' );
 		}
 
 		$out = isset( $created['address_out'] ) && is_string( $created['address_out'] ) ? $created['address_out'] : '';
 		if ( self::canonical_wallet( $ticker, $out ) !== self::canonical_wallet( $ticker, $wallet ) ) {
-			TrezorPay_Logger::debug( sprintf( 'Address for %s forwards to another wallet than the configured one: creating a new one.', $ticker ) );
-			return new WP_Error( 'trezorpay_wallet_changed', 'Wallet changed' );
+			NoncePay_Logger::debug( sprintf( 'Address for %s forwards to another wallet than the configured one: creating a new one.', $ticker ) );
+			return new WP_Error( 'noncepay_wallet_changed', 'Wallet changed' );
 		}
 		return $created;
 	}
@@ -575,7 +575,7 @@ final class TrezorPay_Order {
 	 */
 	private static function canonical_wallet( $ticker, $wallet ) {
 		$wallet = trim( $wallet );
-		if ( 'evm' === TrezorPay_Coins::family( $ticker ) ) {
+		if ( 'evm' === NoncePay_Coins::family( $ticker ) ) {
 			return strtolower( $wallet );
 		}
 		$bare = preg_replace( '/^bitcoincash:/i', '', $wallet );
@@ -594,10 +594,10 @@ final class TrezorPay_Order {
 		return add_query_arg(
 			array(
 				'order'  => $order->get_id(),
-				'ticker' => TrezorPay_Coins::callback_coin( $ticker ),
+				'ticker' => NoncePay_Coins::callback_coin( $ticker ),
 				'token'  => $token,
 			),
-			rest_url( 'trezorpay/v1/callback' )
+			rest_url( 'noncepay/v1/callback' )
 		);
 	}
 
@@ -609,28 +609,28 @@ final class TrezorPay_Order {
 	 * @return string|WP_Error Coin amount.
 	 */
 	private static function convert( $order, $coin ) {
-		$total = TrezorPay_Decimal::parse( wc_format_decimal( $order->get_total(), wc_get_price_decimals() ) );
-		if ( null === $total || TrezorPay_Decimal::cmp( $total, '0' ) <= 0 ) {
-			return new WP_Error( 'trezorpay_total', __( 'This order has nothing to pay.', 'trezorpay-for-woocommerce' ) );
+		$total = NoncePay_Decimal::parse( wc_format_decimal( $order->get_total(), wc_get_price_decimals() ) );
+		if ( null === $total || NoncePay_Decimal::cmp( $total, '0' ) <= 0 ) {
+			return new WP_Error( 'noncepay_total', __( 'This order has nothing to pay.', 'noncepay-for-woocommerce' ) );
 		}
 
 		$currency  = $order->get_currency();
-		$converted = TrezorPay_API::convert( $coin['ticker'], $total, $currency );
+		$converted = NoncePay_API::convert( $coin['ticker'], $total, $currency );
 		if ( is_wp_error( $converted ) ) {
 			if ( 'Coin not supported' === $converted->get_error_message() ) {
-				TrezorPay_Logger::error( sprintf( 'Store currency %s is not supported by TrezorPay conversions.', $currency ) );
+				NoncePay_Logger::error( sprintf( 'Store currency %s is not supported by NoncePay conversions.', $currency ) );
 				/* translators: %s: currency code */
-				return new WP_Error( 'trezorpay_currency', sprintf( __( 'Crypto payments are not available for prices in %s. Please choose another payment method.', 'trezorpay-for-woocommerce' ), $currency ) );
+				return new WP_Error( 'noncepay_currency', sprintf( __( 'Crypto payments are not available for prices in %s. Please choose another payment method.', 'noncepay-for-woocommerce' ), $currency ) );
 			}
 			return self::generic_error( $converted );
 		}
 
-		$amount = TrezorPay_Decimal::parse( isset( $converted['value_coin'] ) ? $converted['value_coin'] : null );
-		if ( null === $amount || TrezorPay_Decimal::cmp( $amount, '0' ) <= 0 ) {
-			TrezorPay_Logger::error( sprintf( 'Unusable conversion for %s.', $coin['ticker'] ) );
+		$amount = NoncePay_Decimal::parse( isset( $converted['value_coin'] ) ? $converted['value_coin'] : null );
+		if ( null === $amount || NoncePay_Decimal::cmp( $amount, '0' ) <= 0 ) {
+			NoncePay_Logger::error( sprintf( 'Unusable conversion for %s.', $coin['ticker'] ) );
 			return self::generic_error();
 		}
-		if ( '' !== $coin['minimum'] && TrezorPay_Decimal::cmp( $amount, $coin['minimum'] ) < 0 ) {
+		if ( '' !== $coin['minimum'] && NoncePay_Decimal::cmp( $amount, $coin['minimum'] ) < 0 ) {
 			return self::below_minimum_error( $coin, $coin['minimum'] );
 		}
 		return $amount;
@@ -646,7 +646,7 @@ final class TrezorPay_Order {
 	 * @param int      $minutes Validity.
 	 */
 	private static function store_quote( $order, $ticker, $address, $amount, $minutes ) {
-		$qr   = TrezorPay_API::qrcode( $ticker, $address, $amount, 300 );
+		$qr   = NoncePay_API::qrcode( $ticker, $address, $amount, 300 );
 		$code = ! is_wp_error( $qr ) && isset( $qr['qr_code'] ) && is_string( $qr['qr_code'] ) && preg_match( '/^[A-Za-z0-9+\/=]+$/', $qr['qr_code'] ) ? $qr['qr_code'] : '';
 
 		$order->update_meta_data( self::AMOUNT, $amount );
@@ -677,9 +677,9 @@ final class TrezorPay_Order {
 	 */
 	private static function below_minimum_error( $coin, $minimum ) {
 		return new WP_Error(
-			'trezorpay_minimum',
+			'noncepay_minimum',
 			/* translators: 1: coin label, 2: minimum amount, 3: coin symbol */
-			sprintf( __( 'The order total is below the minimum payment for %1$s (%2$s %3$s). Please choose another cryptocurrency.', 'trezorpay-for-woocommerce' ), TrezorPay_Coins::label( $coin ), $minimum, $coin['symbol'] )
+			sprintf( __( 'The order total is below the minimum payment for %1$s (%2$s %3$s). Please choose another cryptocurrency.', 'noncepay-for-woocommerce' ), NoncePay_Coins::label( $coin ), $minimum, $coin['symbol'] )
 		);
 	}
 
@@ -690,9 +690,9 @@ final class TrezorPay_Order {
 	 * @return WP_Error
 	 */
 	private static function generic_error( $error = null ) {
-		if ( $error instanceof WP_Error && in_array( $error->get_error_code(), array( 'trezorpay_unreachable', 'trezorpay_bad_response' ), true ) ) {
+		if ( $error instanceof WP_Error && in_array( $error->get_error_code(), array( 'noncepay_unreachable', 'noncepay_bad_response' ), true ) ) {
 			return $error;
 		}
-		return new WP_Error( 'trezorpay_error', __( 'The crypto payment could not be prepared. Please try again or choose another payment method.', 'trezorpay-for-woocommerce' ) );
+		return new WP_Error( 'noncepay_error', __( 'The crypto payment could not be prepared. Please try again or choose another payment method.', 'noncepay-for-woocommerce' ) );
 	}
 }

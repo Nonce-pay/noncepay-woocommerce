@@ -5,7 +5,7 @@
  * Crypto amounts carry up to 18 decimals: floats would round them, so every
  * amount stays a string. Uses bcmath when it is loaded, plain string math otherwise.
  *
- * @package TrezorPay
+ * @package NoncePay
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Decimal helper.
  */
-final class TrezorPay_Decimal {
+final class NoncePay_Decimal {
 
 	/**
 	 * Whether to use bcmath. Null means auto-detect.

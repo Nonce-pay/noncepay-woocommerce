@@ -2,7 +2,7 @@
 /**
  * Logging through the WooCommerce logger.
  *
- * @package TrezorPay
+ * @package NoncePay
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,9 +10,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Logger. Debug lines are written only when the debug setting is on; errors always are.
  */
-final class TrezorPay_Logger {
+final class NoncePay_Logger {
 
-	const SOURCE = 'trezorpay-for-woocommerce';
+	const SOURCE = 'noncepay-for-woocommerce';
 
 	/**
 	 * Logs a debug message when debug logging is enabled.
@@ -20,7 +20,7 @@ final class TrezorPay_Logger {
 	 * @param string $message Message, never containing tokens or keys.
 	 */
 	public static function debug( $message ) {
-		$settings = get_option( 'woocommerce_trezorpay_settings', array() );
+		$settings = get_option( 'woocommerce_noncepay_settings', array() );
 		if ( isset( $settings['debug'] ) && 'yes' === $settings['debug'] ) {
 			self::write( 'debug', $message );
 		}

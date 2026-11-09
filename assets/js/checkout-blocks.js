@@ -1,4 +1,4 @@
-/* TrezorPay payment method for the WooCommerce Checkout block. Plain script, no build step. */
+/* NoncePay payment method for the WooCommerce Checkout block. Plain script, no build step. */
 ;(function () {
   'use strict'
 
@@ -22,9 +22,9 @@
         return s
       }
 
-  var settings = wcSettings.getSetting('trezorpay_data', {})
+  var settings = wcSettings.getSetting('noncepay_data', {})
   var coins = settings.coins || []
-  var title = decode(settings.title || __('Crypto', 'trezorpay-for-woocommerce'))
+  var title = decode(settings.title || __('Crypto', 'noncepay-for-woocommerce'))
 
   function Content(props) {
     var initial = coins.length ? coins[0].value : ''
@@ -46,13 +46,13 @@
               type: responses.ERROR,
               message: __(
                 'Please choose a cryptocurrency to pay with.',
-                'trezorpay-for-woocommerce'
+                'noncepay-for-woocommerce'
               ),
             }
           }
           return {
             type: responses.SUCCESS,
-            meta: { paymentMethodData: { trezorpay_coin: coin } },
+            meta: { paymentMethodData: { noncepay_coin: coin } },
           }
         })
       },
@@ -61,17 +61,17 @@
 
     return el(
       'div',
-      { className: 'trezorpay-blocks' },
+      { className: 'noncepay-blocks' },
       settings.description ? el('p', null, decode(settings.description)) : null,
       el(
         'label',
-        { htmlFor: 'trezorpay-coin', style: { display: 'block', marginBottom: '4px' } },
-        __('Pay with', 'trezorpay-for-woocommerce')
+        { htmlFor: 'noncepay-coin', style: { display: 'block', marginBottom: '4px' } },
+        __('Pay with', 'noncepay-for-woocommerce')
       ),
       el(
         'select',
         {
-          id: 'trezorpay-coin',
+          id: 'noncepay-coin',
           value: coin,
           onChange: function (event) {
             setCoin(event.target.value)
@@ -91,7 +91,7 @@
   }
 
   registry.registerPaymentMethod({
-    name: 'trezorpay',
+    name: 'noncepay',
     label: el(Label, null),
     content: el(Content, null),
     edit: el(Content, null),

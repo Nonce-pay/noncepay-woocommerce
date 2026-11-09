@@ -2,7 +2,7 @@
 /**
  * REST routes: the signed payment callback and the customer status poll.
  *
- * @package TrezorPay
+ * @package NoncePay
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,9 +10,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * REST controller.
  */
-final class TrezorPay_REST {
+final class NoncePay_REST {
 
-	const NAMESPACE_V1 = 'trezorpay/v1';
+	const NAMESPACE_V1 = 'noncepay/v1';
 
 	/**
 	 * Hooks the routes.
@@ -58,7 +58,7 @@ final class TrezorPay_REST {
 	}
 
 	/**
-	 * Handles a TrezorPay callback. Answers *ok* to every validly signed call so it is not retried.
+	 * Handles a NoncePay callback. Answers *ok* to every validly signed call so it is not retried.
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return WP_REST_Response
@@ -69,12 +69,12 @@ final class TrezorPay_REST {
 		$token    = isset( $params['token'] ) && is_string( $params['token'] ) ? $params['token'] : '';
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
-		if ( ! self::signature_is_valid( (string) $request->get_header( 'x-ca-signature' ), TrezorPay_Order::is_ours( $order ) ? $order : null ) ) {
-			TrezorPay_Logger::error( 'Callback rejected: invalid signature. If your site is behind a proxy, see the FAQ about trezorpay_callback_base_url.' );
+		if ( ! self::signature_is_valid( (string) $request->get_header( 'x-ca-signature' ), NoncePay_Order::is_ours( $order ) ? $order : null ) ) {
+			NoncePay_Logger::error( 'Callback rejected: invalid signature. If your site is behind a proxy, see the FAQ about noncepay_callback_base_url.' );
 			return self::text( 'Bad signature', 401 );
 		}
 
-		TrezorPay_Logger::debug( sprintf( 'Signed callback for order %d (pending=%s).', $order_id, isset( $params['pending'] ) ? sanitize_text_field( (string) $params['pending'] ) : '?' ) );
+		NoncePay_Logger::debug( sprintf( 'Signed callback for order %d (pending=%s).', $order_id, isset( $params['pending'] ) ? sanitize_text_field( (string) $params['pending'] ) : '?' ) );
 
 		if ( ! $order_id || '' === $token ) {
 			return self::text( '*ok*' );
@@ -85,13 +85,13 @@ final class TrezorPay_REST {
 		}
 
 		try {
-			$order = TrezorPay_Order::reload( $order_id );
-			if ( ! TrezorPay_Order::is_ours( $order ) || ! TrezorPay_Order::token_matches( $order, $token ) ) {
-				TrezorPay_Logger::debug( sprintf( 'Callback for order %d ignored: unknown order or token mismatch.', $order_id ) );
+			$order = NoncePay_Order::reload( $order_id );
+			if ( ! NoncePay_Order::is_ours( $order ) || ! NoncePay_Order::token_matches( $order, $token ) ) {
+				NoncePay_Logger::debug( sprintf( 'Callback for order %d ignored: unknown order or token mismatch.', $order_id ) );
 				return self::text( '*ok*' );
 			}
-			$gateway = trezorpay_gateway();
-			TrezorPay_Order::apply_callback( $order, $params, $gateway ? $gateway->settings : array() );
+			$gateway = noncepay_gateway();
+			NoncePay_Order::apply_callback( $order, $params, $gateway ? $gateway->settings : array() );
 		} finally {
 			self::unlock( $order_id );
 		}
@@ -110,7 +110,7 @@ final class TrezorPay_REST {
 		if ( is_wp_error( $order ) ) {
 			return $order;
 		}
-		$response = rest_ensure_response( TrezorPay_Order::state( $order ) );
+		$response = rest_ensure_response( NoncePay_Order::state( $order ) );
 		$response->header( 'Cache-Control', 'no-store' );
 		return $response;
 	}
@@ -126,17 +126,17 @@ final class TrezorPay_REST {
 		if ( is_wp_error( $order ) ) {
 			return $order;
 		}
-		$gateway = trezorpay_gateway();
+		$gateway = noncepay_gateway();
 		if ( ! $gateway || ! self::lock( $order->get_id() ) ) {
-			return new WP_Error( 'trezorpay_busy', __( 'Please try again in a moment.', 'trezorpay-for-woocommerce' ), array( 'status' => 503 ) );
+			return new WP_Error( 'noncepay_busy', __( 'Please try again in a moment.', 'noncepay-for-woocommerce' ), array( 'status' => 503 ) );
 		}
 		try {
-			$order = TrezorPay_Order::reload( $order->get_id() );
-			$state = TrezorPay_Order::state( $order );
+			$order = NoncePay_Order::reload( $order->get_id() );
+			$state = NoncePay_Order::state( $order );
 			if ( 'expired' !== $state['state'] || ! $order->has_status( 'pending' ) ) {
-				return new WP_Error( 'trezorpay_not_expired', __( 'This quote cannot be refreshed.', 'trezorpay-for-woocommerce' ), array( 'status' => 409 ) );
+				return new WP_Error( 'noncepay_not_expired', __( 'This quote cannot be refreshed.', 'noncepay-for-woocommerce' ), array( 'status' => 409 ) );
 			}
-			$result = TrezorPay_Order::requote( $order, $gateway->quote_minutes() );
+			$result = NoncePay_Order::requote( $order, $gateway->quote_minutes() );
 		} finally {
 			self::unlock( $order->get_id() );
 		}
@@ -144,7 +144,7 @@ final class TrezorPay_REST {
 			return new WP_Error( $result->get_error_code(), $result->get_error_message(), array( 'status' => 502 ) );
 		}
 		$order = wc_get_order( $order->get_id() );
-		return rest_ensure_response( TrezorPay_Payment_Page::view_data( $order ) );
+		return rest_ensure_response( NoncePay_Payment_Page::view_data( $order ) );
 	}
 
 	/**
@@ -166,7 +166,7 @@ final class TrezorPay_REST {
 	}
 
 	/**
-	 * Verifies x-ca-signature over the URL exactly as TrezorPay called it.
+	 * Verifies x-ca-signature over the URL exactly as NoncePay called it.
 	 *
 	 * @param string        $signature Base64 signature.
 	 * @param WC_Order|null $order     Order named by the callback, whose stored base URL is used.
@@ -178,32 +178,32 @@ final class TrezorPay_REST {
 			return false;
 		}
 		$url = self::requested_url( $order );
-		$key = TrezorPay_API::public_key();
+		$key = NoncePay_API::public_key();
 		if ( '' !== $key && 1 === openssl_verify( $url, $raw, $key, OPENSSL_ALGO_SHA256 ) ) {
 			return true;
 		}
-		if ( TrezorPay_API::public_key_is_pinned() ) {
+		if ( NoncePay_API::public_key_is_pinned() ) {
 			return false;
 		}
-		$fresh = TrezorPay_API::public_key( true );
+		$fresh = NoncePay_API::public_key( true );
 		return '' !== $fresh && $fresh !== $key && 1 === openssl_verify( $url, $raw, $fresh, OPENSSL_ALGO_SHA256 );
 	}
 
 	/**
-	 * The full URL TrezorPay called: the scheme, host and port of the callback URL stored on the
+	 * The full URL NoncePay called: the scheme, host and port of the callback URL stored on the
 	 * order (the site URL when there is none) plus the raw request URI.
 	 *
-	 * Behind a proxy that rewrites the path, set the public base with the trezorpay_callback_base_url filter.
+	 * Behind a proxy that rewrites the path, set the public base with the noncepay_callback_base_url filter.
 	 *
 	 * @param WC_Order|null $order Order named by the callback.
 	 * @return string
 	 */
 	private static function requested_url( $order ) {
-		$base = $order ? (string) $order->get_meta( TrezorPay_Order::BASE_URL ) : '';
+		$base = $order ? (string) $order->get_meta( NoncePay_Order::BASE_URL ) : '';
 		if ( '' === $base ) {
-			$base = TrezorPay_Order::url_base( home_url() );
+			$base = NoncePay_Order::url_base( home_url() );
 		}
-		$base = untrailingslashit( (string) apply_filters( 'trezorpay_callback_base_url', $base, $order ) );
+		$base = untrailingslashit( (string) apply_filters( 'noncepay_callback_base_url', $base, $order ) );
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- signed bytes must stay exactly as received; only compared, never output.
 		$uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
 		return $base . $uri;
@@ -218,8 +218,8 @@ final class TrezorPay_REST {
 	private static function customer_order( WP_REST_Request $request ) {
 		$order = wc_get_order( absint( $request->get_param( 'order_id' ) ) );
 		$key   = (string) $request->get_param( 'key' );
-		if ( ! TrezorPay_Order::is_ours( $order ) || '' === $key || ! hash_equals( $order->get_order_key(), $key ) ) {
-			return new WP_Error( 'trezorpay_not_found', __( 'Order not found.', 'trezorpay-for-woocommerce' ), array( 'status' => 404 ) );
+		if ( ! NoncePay_Order::is_ours( $order ) || '' === $key || ! hash_equals( $order->get_order_key(), $key ) ) {
+			return new WP_Error( 'noncepay_not_found', __( 'Order not found.', 'noncepay-for-woocommerce' ), array( 'status' => 404 ) );
 		}
 		return $order;
 	}
@@ -273,7 +273,7 @@ final class TrezorPay_REST {
 	 */
 	private static function lock_name( $order_id ) {
 		global $wpdb;
-		return 'trezorpay_' . substr( md5( DB_NAME . $wpdb->prefix ), 0, 12 ) . '_' . $order_id;
+		return 'noncepay_' . substr( md5( DB_NAME . $wpdb->prefix ), 0, 12 ) . '_' . $order_id;
 	}
 
 	/**

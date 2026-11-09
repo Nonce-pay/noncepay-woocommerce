@@ -2,7 +2,7 @@
 /**
  * Cart and Checkout blocks integration.
  *
- * @package TrezorPay
+ * @package NoncePay
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,22 +10,22 @@ defined( 'ABSPATH' ) || exit;
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 
 /**
- * Registers TrezorPay with the block checkout.
+ * Registers NoncePay with the block checkout.
  */
-final class TrezorPay_Blocks extends AbstractPaymentMethodType {
+final class NoncePay_Blocks extends AbstractPaymentMethodType {
 
 	/**
 	 * Payment method name, matching the gateway id.
 	 *
 	 * @var string
 	 */
-	protected $name = 'trezorpay';
+	protected $name = 'noncepay';
 
 	/**
 	 * Loads the settings.
 	 */
 	public function initialize() {
-		$this->settings = get_option( 'woocommerce_trezorpay_settings', array() );
+		$this->settings = get_option( 'woocommerce_noncepay_settings', array() );
 	}
 
 	/**
@@ -34,7 +34,7 @@ final class TrezorPay_Blocks extends AbstractPaymentMethodType {
 	 * @return bool
 	 */
 	public function is_active() {
-		$gateway = trezorpay_gateway();
+		$gateway = noncepay_gateway();
 		return $gateway && $gateway->is_available();
 	}
 
@@ -45,23 +45,23 @@ final class TrezorPay_Blocks extends AbstractPaymentMethodType {
 	 */
 	public function get_payment_method_script_handles() {
 		wp_register_script(
-			'trezorpay-blocks',
-			TREZORPAY_URL . 'assets/js/checkout-blocks.js',
+			'noncepay-blocks',
+			NONCEPAY_URL . 'assets/js/checkout-blocks.js',
 			array( 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-html-entities', 'wp-i18n' ),
-			TREZORPAY_VERSION,
+			NONCEPAY_VERSION,
 			true
 		);
-		wp_set_script_translations( 'trezorpay-blocks', 'trezorpay-for-woocommerce' );
-		return array( 'trezorpay-blocks' );
+		wp_set_script_translations( 'noncepay-blocks', 'noncepay-for-woocommerce' );
+		return array( 'noncepay-blocks' );
 	}
 
 	/**
-	 * Data exposed to the script as getSetting( 'trezorpay_data' ).
+	 * Data exposed to the script as getSetting( 'noncepay_data' ).
 	 *
 	 * @return array
 	 */
 	public function get_payment_method_data() {
-		$gateway = trezorpay_gateway();
+		$gateway = noncepay_gateway();
 		$coins   = array();
 		if ( $gateway ) {
 			foreach ( $gateway->checkout_coins() as $ticker => $label ) {

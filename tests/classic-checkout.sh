@@ -10,7 +10,7 @@ curl -s -c $J -b $J "$B/?wc-ajax=checkout" \
   --data-urlencode "billing_country=FR" --data-urlencode "billing_address_1=1 rue Test" \
   --data-urlencode "billing_city=Paris" --data-urlencode "billing_postcode=75001" \
   --data-urlencode "billing_email=ada@example.com" --data-urlencode "billing_phone=0600000000" \
-  --data-urlencode "payment_method=trezorpay" --data-urlencode "trezorpay_coin=$COIN" \
+  --data-urlencode "payment_method=noncepay" --data-urlencode "noncepay_coin=$COIN" \
   --data-urlencode "terms=1" --data-urlencode "woocommerce-process-checkout-nonce=$NONCE" \
   --data-urlencode "_wp_http_referer=/classic-checkout/"
 echo
